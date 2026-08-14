@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { asset } from '../utils';
+---
+
+<Base title="Not found" description="This page does not exist.">
+  <section class="nf wrap">
+    <p class="mono nf__code">(404)</p>
+    <h1 class="nf__title display">Out of<br />bounds</h1>
+    <p class="nf__body">
+      This page does not exist — or it did, and got refactored out.
+    </p>
+    <a class="nf__cta mono" href={asset('/')}>
+      <span aria-hidden="true">←</span> Back to start
+    </a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 70svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(4rem, 12vh, 8rem);
+  }
+
+  .nf__code {
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .nf__title {
+    font-size: clamp(3rem, 13vw, 11rem);
+    font-stretch: 118%;
+  }
+
+  .nf__body {
+    margin-top: 1.5rem;
+    color: var(--text-dim);
+    max-width: 44ch;
+  }
+
+  .nf__cta {
+    align-self: flex-start;
+    margin-top: 2.5rem;
+    padding: 0.85rem 1.3rem;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+
+  .nf__cta:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #08080a;
+  }
+</style>

@@ -1,0 +1,349 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site } from '../site';
+import { asset } from '../utils';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 4);
+---
+
+<Base>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <video
+        data-lazy
+        data-src={asset('/media/home/reel.mp4')}
+        poster={asset('/media/zero-g-chef/shot-01.webp')}
+        preload="none"
+        muted
+        loop
+        playsinline
+        tabindex="-1"></video>
+    </div>
+
+    <div class="wrap hero__inner">
+      <p class="mono hero__eyebrow">
+        <span class="hero__eyebrow-dot" aria-hidden="true"></span>
+        Unity &middot; Godot &middot; Solo dev &middot; Available for contract work
+      </p>
+
+      <h1 class="hero__title display">
+        <span>{site.hero.line1}</span>
+        <span>{site.hero.line2}</span>
+      </h1>
+
+      <div class="hero__bottom">
+        <p class="hero__intro">{site.hero.intro}</p>
+        <a class="hero__scroll mono" href="#work">
+          Selected work <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WORK ================= -->
+  <section class="section wrap" id="work">
+    <SectionHead
+      index="01"
+      title="Selected work"
+      note="Shipped games and client projects, PC and mobile."
+    />
+
+    <div class="cards">
+      {
+        projects.map((p, i) => (
+          <ProjectCard
+            slug={p.id}
+            index={i + 1}
+            title={p.data.title}
+            tagline={p.data.tagline}
+            role={p.data.role}
+            engine={p.data.engine}
+            year={p.data.year}
+            tags={p.data.tags}
+            cover={p.data.cover}
+            poster={p.data.poster}
+            accent={p.data.accent}
+          />
+        ))
+      }
+    </div>
+
+    <a class="all-work mono" href={asset('/work')}>
+      All projects <span aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <!-- ================= CAPABILITIES ================= -->
+  <section class="section wrap">
+    <SectionHead
+      index="02"
+      title="What I do"
+      note="Hired for the code. Occasionally for everything else."
+    />
+
+    <ul class="caps">
+      {
+        site.capabilities.map((c) => (
+          <li class="cap reveal">
+            <img
+              class="cap__icon"
+              src={asset(c.icon)}
+              alt=""
+              width="64"
+              height="64"
+              loading="lazy"
+              decoding="async"
+            />
+            <h3 class="cap__title">{c.title}</h3>
+            <p class="cap__body">{c.body}</p>
+            <ul class="tags mono cap__stack">
+              {c.stack.map((s) => (
+                <li class="tag">{s}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="section wrap" id="about">
+    <SectionHead index="03" title="About" />
+
+    <div class="about reveal">
+      <p class="about__lead display">
+        Solo developer.<br />Contract work.<br />Shipped games.
+      </p>
+      <div class="about__body">
+        {site.about.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------------- Hero ---------------- */
+  .hero {
+    position: relative;
+    min-height: min(92svh, 60rem);
+    display: flex;
+    align-items: flex-end;
+    padding-block: clamp(4rem, 14vh, 9rem) clamp(2rem, 6vh, 4rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero__bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.32;
+    filter: saturate(0.7) contrast(1.05);
+  }
+
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        120% 80% at 70% 30%,
+        transparent,
+        color-mix(in srgb, var(--bg) 88%, transparent) 70%
+      ),
+      linear-gradient(to top, var(--bg) 2%, transparent 60%);
+  }
+
+  .hero__inner {
+    width: 100%;
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text-dim);
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .hero__eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* Taille calibree sur le mot le plus long ("Developer") pour qu'il tienne
+     exactement dans la gouttiere, du mobile au 4K. */
+  .hero__title {
+    font-size: clamp(2.75rem, 12vw, 12rem);
+    font-stretch: 112%;
+  }
+
+  .hero__title span {
+    display: block;
+  }
+
+  .hero__title span:last-child {
+    color: var(--text-dim);
+  }
+
+  .hero__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: clamp(2rem, 6vw, 4rem);
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .hero__intro {
+    max-width: 52ch;
+    color: var(--text-dim);
+  }
+
+  .hero__scroll {
+    color: var(--text);
+    white-space: nowrap;
+    border: 1px solid var(--line);
+    padding: 0.7rem 1.1rem;
+    border-radius: 2px;
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+
+  .hero__scroll:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #08080a;
+  }
+
+  /* ---------------- Sections ---------------- */
+  .section {
+    padding-block: var(--section-gap) 0;
+  }
+
+  .section:last-of-type {
+    padding-bottom: var(--section-gap);
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .all-work {
+    display: inline-block;
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding: 0.85rem 1.3rem;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--text);
+    transition:
+      background 0.3s var(--ease),
+      color 0.3s var(--ease),
+      border-color 0.3s var(--ease);
+  }
+
+  .all-work:hover {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
+  }
+
+  /* ---------------- Capabilities ---------------- */
+  .caps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+  }
+
+  .cap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--bg);
+    transition: background 0.4s var(--ease);
+  }
+
+  .cap:hover {
+    background: var(--bg-raise);
+  }
+
+  .cap__icon {
+    width: 4rem;
+    height: 4rem;
+    object-fit: contain;
+    opacity: 0.7;
+    transition: opacity 0.4s var(--ease);
+  }
+
+  .cap:hover .cap__icon {
+    opacity: 1;
+  }
+
+  .cap__title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .cap__body {
+    color: var(--text-dim);
+    font-size: 0.9375rem;
+    flex: 1;
+  }
+
+  .cap__stack {
+    margin-top: auto;
+  }
+
+  /* ---------------- About ---------------- */
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .about__lead {
+    font-size: clamp(1.5rem, 3.2vw, 2.75rem);
+    font-stretch: 104%;
+  }
+
+  .about__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    color: var(--text-dim);
+    max-width: 60ch;
+  }
+
+  @media (max-width: 52rem) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

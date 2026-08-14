@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base
+  title="Work"
+  description="Games and client projects built in Unity and Godot by Germain Cassé."
+>
+  <section class="section wrap">
+    <h1 class="page-title display">Work</h1>
+    <SectionHead
+      index={String(projects.length).padStart(2, '0')}
+      title="Projects"
+      note="Every project below shipped or is in active production."
+    />
+
+    <div class="cards">
+      {
+        projects.map((p, i) => (
+          <ProjectCard
+            slug={p.id}
+            index={i + 1}
+            title={p.data.title}
+            tagline={p.data.tagline}
+            role={p.data.role}
+            engine={p.data.engine}
+            year={p.data.year}
+            tags={p.data.tags}
+            cover={p.data.cover}
+            poster={p.data.poster}
+            accent={p.data.accent}
+          />
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section {
+    padding-block: clamp(3rem, 10vh, 7rem) var(--section-gap);
+  }
+
+  .page-title {
+    font-size: clamp(3rem, 13vw, 11rem);
+    font-stretch: 118%;
+    margin-bottom: clamp(2rem, 6vw, 4rem);
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+  }
+</style>

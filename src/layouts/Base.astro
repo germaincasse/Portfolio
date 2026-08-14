@@ -1,0 +1,123 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../site';
+import { asset } from '../utils';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Image de partage (chemin depuis /public). */
+  ogImage?: string;
+  /** Accent surcharge par les pages projet. */
+  accent?: string;
+}
+
+const {
+  title,
+  description = site.description,
+  ogImage = '/media/zero-g-chef/shot-01.webp',
+  accent,
+} = Astro.props;
+
+const pageTitle = title
+  ? `${title} — ${site.name}`
+  : `${site.name} — ${site.role}`;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href={asset('/favicon.svg')} type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogUrl.href} />
+    <meta property="og:url" content={canonical.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#08080a" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body
+    style={`--grain-src: url("${asset('/grain.png')}");${accent ? ` --accent: ${accent};` : ''}`}
+  >
+    <a class="skip-link mono" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // --- Reveal au scroll -------------------------------------------------
+      const revealables = document.querySelectorAll<HTMLElement>('.reveal');
+      if (
+        'IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.05 },
+        );
+        revealables.forEach((el) => io.observe(el));
+      } else {
+        revealables.forEach((el) => el.classList.add('is-in'));
+      }
+
+      // --- Lecture des videos uniquement quand elles sont visibles ----------
+      // Les .mp4 sont lourds: preload="none" dans le HTML, on ne charge et ne
+      // joue que ce que l'utilisateur regarde vraiment.
+      const videos =
+        document.querySelectorAll<HTMLVideoElement>('video[data-lazy]');
+      const conn = (navigator as any).connection;
+      const saveData = Boolean(conn?.saveData);
+      const reduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
+
+      if (videos.length && !saveData && !reduced && 'IntersectionObserver' in window) {
+        const vio = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const v = e.target as HTMLVideoElement;
+              if (e.isIntersecting) {
+                if (v.preload !== 'auto') v.preload = 'auto';
+                if (!v.src && v.dataset.src) v.src = v.dataset.src;
+                v.play().catch(() => {
+                  /* autoplay refuse: le poster reste, tres bien */
+                });
+              } else {
+                v.pause();
+              }
+            }
+          },
+          { threshold: 0.25 },
+        );
+        videos.forEach((v) => vio.observe(v));
+      }
+    </script>
+  </body>
+</html>

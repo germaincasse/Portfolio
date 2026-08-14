@@ -1,0 +1,219 @@
+---
+import { asset, pad } from '../utils';
+
+interface Props {
+  slug: string;
+  index: number;
+  title: string;
+  tagline: string;
+  role: string;
+  engine: string;
+  year: number;
+  tags: readonly string[];
+  cover?: string;
+  poster: string;
+  accent: string;
+}
+
+const {
+  slug,
+  index,
+  title,
+  tagline,
+  role,
+  engine,
+  year,
+  tags,
+  cover,
+  poster,
+  accent,
+} = Astro.props;
+---
+
+<a
+  class="card reveal"
+  href={asset(`/work/${slug}`)}
+  style={`--accent: ${accent};`}
+  aria-label={`${title} — ${tagline}`}
+>
+  <div class="card__media">
+    {
+      cover ? (
+        <video
+          data-lazy
+          data-src={asset(cover)}
+          poster={asset(poster)}
+          preload="none"
+          muted
+          loop
+          playsinline
+          aria-hidden="true"
+          tabindex="-1"
+        />
+      ) : (
+        <img src={asset(poster)} alt="" loading="lazy" decoding="async" />
+      )
+    }
+    <span class="card__index mono">{pad(index)}</span>
+    <span class="card__view mono">View project<span aria-hidden="true"> →</span></span>
+  </div>
+
+  <div class="card__foot">
+    <h3 class="card__title display">{title}</h3>
+    <div class="card__right">
+      <p class="card__tagline">{tagline}</p>
+      <ul class="tags mono">
+        {tags.map((t) => <li class="tag">{t}</li>)}
+      </ul>
+    </div>
+    <p class="card__meta mono">{role} <span aria-hidden="true">/</span> {engine} <span aria-hidden="true">/</span> {year}</p>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .card:first-child {
+    border-top: 0;
+  }
+
+  .card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    max-height: 78vh;
+    overflow: hidden;
+    background: var(--bg-sunken);
+    border-radius: 3px;
+  }
+
+  .card__media video,
+  .card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.005);
+    transition:
+      transform 0.8s var(--ease),
+      filter 0.6s var(--ease);
+    filter: saturate(0.85) contrast(1.02);
+  }
+
+  .card:hover .card__media video,
+  .card:hover .card__media img,
+  .card:focus-visible .card__media video,
+  .card:focus-visible .card__media img {
+    transform: scale(1.04);
+    filter: saturate(1) contrast(1.02);
+  }
+
+  /* Voile qui s'estompe au survol: le gameplay reprend la main. */
+  .card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--bg) 70%, transparent),
+      transparent 45%
+    );
+    opacity: 1;
+    transition: opacity 0.6s var(--ease);
+    pointer-events: none;
+  }
+
+  .card:hover .card__media::after {
+    opacity: 0.4;
+  }
+
+  .card__index {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    padding: 0.3rem 0.5rem;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--accent);
+    border-radius: 2px;
+  }
+
+  .card__view {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 2;
+    padding: 0.5rem 0.8rem;
+    background: var(--accent);
+    color: #08080a;
+    border-radius: 2px;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.4s var(--ease);
+  }
+
+  .card:hover .card__view,
+  .card:focus-visible .card__view {
+    opacity: 1;
+    transform: none;
+  }
+
+  .card__foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem clamp(1.5rem, 4vw, 4rem);
+    padding-top: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .card__title {
+    grid-column: 1;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-stretch: 108%;
+    transition: color 0.35s var(--ease);
+  }
+
+  .card:hover .card__title,
+  .card:focus-visible .card__title {
+    color: var(--accent);
+  }
+
+  .card__right {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 0.4rem;
+  }
+
+  .card__tagline {
+    color: var(--text-dim);
+    font-size: 1rem;
+    max-width: 46ch;
+  }
+
+  .card__meta {
+    grid-column: 1 / -1;
+    color: var(--text-faint);
+    padding-top: 0.5rem;
+  }
+
+  @media (max-width: 52rem) {
+    .card__foot {
+      grid-template-columns: 1fr;
+    }
+    .card__title,
+    .card__right {
+      grid-column: 1;
+    }
+    .card__view {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,148 @@
+---
+import { site } from '../site';
+
+const year = new Date().getFullYear();
+---
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <p class="mono contact__label">( Contact )</p>
+    <a class="contact__cta display" href={`mailto:${site.email}`}>
+      Let's build<br />your game
+    </a>
+
+    <div class="contact__grid">
+      <div>
+        <p class="mono contact__key">Email</p>
+        <a class="contact__val link-underline" href={`mailto:${site.email}`}>
+          {site.email}
+        </a>
+      </div>
+      <div>
+        <p class="mono contact__key">Based in</p>
+        <p class="contact__val">{site.location}</p>
+      </div>
+      <div>
+        <p class="mono contact__key">Status</p>
+        <p class="contact__val contact__val--free">
+          <span class="contact__dot" aria-hidden="true"></span>
+          Open to contract work
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="ftr">
+  <div class="wrap ftr__inner mono">
+    <span>&copy; {year} {site.name}</span>
+    <ul class="ftr__links">
+      {
+        site.links.map((l) => (
+          <li>
+            <a
+              class="link-underline"
+              href={l.url}
+              rel={l.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+              target={l.url.startsWith('http') ? '_blank' : undefined}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <span class="ftr__meta">Built with Astro</span>
+  </div>
+</footer>
+
+<style>
+  .contact {
+    border-top: 1px solid var(--line);
+    padding-block: clamp(4rem, 12vh, 9rem) clamp(3rem, 8vh, 6rem);
+  }
+
+  .contact__label {
+    color: var(--accent);
+    margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .contact__cta {
+    display: block;
+    font-size: clamp(2.25rem, 10vw, 9rem);
+    font-stretch: 110%;
+    color: var(--text);
+    transition: color 0.35s var(--ease);
+  }
+
+  .contact__cta:hover {
+    color: var(--accent);
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2rem;
+    margin-top: clamp(3rem, 8vw, 5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .contact__key {
+    color: var(--text-faint);
+    margin-bottom: 0.5rem;
+  }
+
+  .contact__val {
+    font-size: 1rem;
+    color: var(--text-dim);
+  }
+
+  .contact__val--free {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .contact__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+  }
+
+  .ftr {
+    border-top: 1px solid var(--line-soft);
+    padding-block: 1.5rem;
+  }
+
+  .ftr__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    color: var(--text-faint);
+  }
+
+  .ftr__links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ftr__links a:hover {
+    color: var(--text);
+  }
+
+  .ftr__meta {
+    margin-left: auto;
+  }
+
+  @media (max-width: 40rem) {
+    .ftr__meta {
+      margin-left: 0;
+    }
+  }
+</style>
