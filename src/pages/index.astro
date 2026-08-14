@@ -146,12 +146,13 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     z-index: -1;
   }
 
+  /* La desaturation est encodee dans le mp4 (voir scripts/media.mjs): un filter
+     CSS sur une video plein ecran se repaie a chaque frame de lecture. */
   .hero__bg video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     opacity: 0.32;
-    filter: saturate(0.7) contrast(1.05);
   }
 
   .hero__bg::after {

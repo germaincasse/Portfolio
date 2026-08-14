@@ -69,7 +69,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Grain filmique par-dessus toute la page. */
+/* Grain filmique par-dessus toute la page.
+   Pas de mix-blend-mode ici: un blend plein ecran en position fixed force le
+   navigateur a recomposer tout le viewport a chaque frame de scroll, ce qui
+   suffisait a faire ramer la page entiere. Une simple opacite donne le meme
+   grain sur un fond aussi sombre, et la couche peut rester sur le GPU. */
 body::after {
   content: '';
   position: fixed;
@@ -78,8 +82,7 @@ body::after {
   pointer-events: none;
   background-image: var(--grain-src);
   background-size: 180px 180px;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
+  opacity: 0.035;
 }
 
 img,

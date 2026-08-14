@@ -98,6 +98,14 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
       const ambient =
         document.querySelectorAll<HTMLVideoElement>('video[data-lazy]');
 
+      // Le poster du hero s'affiche tout de suite; la video, elle, attend que le
+      // reste de la page soit charge pour ne pas se disputer la bande passante
+      // avec le CSS et les polices pendant le premier rendu.
+      const whenIdle = (fn: () => void) => {
+        if (document.readyState === 'complete') fn();
+        else window.addEventListener('load', fn, { once: true });
+      };
+
       if (ambient.length && !saveData && !reduced && 'IntersectionObserver' in window) {
         const vio = new IntersectionObserver(
           (entries) => {
@@ -116,7 +124,7 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
           },
           { threshold: 0.25 },
         );
-        ambient.forEach((v) => vio.observe(v));
+        whenIdle(() => ambient.forEach((v) => vio.observe(v)));
       }
 
       // --- Cartes projet: l'illustration par defaut, la video au survol -----
@@ -131,20 +139,28 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
           const card = clip.closest<HTMLElement>('.card');
           if (!card) continue;
 
+          let pending: number | undefined;
+
           const start = () => {
-            if (!clip.src && clip.dataset.src) {
-              clip.preload = 'auto';
-              clip.src = clip.dataset.src;
-            }
-            clip
-              .play()
-              .then(() => card.classList.add('is-playing'))
-              .catch(() => {
-                /* pas de lecture: l'illustration reste affichee */
-              });
+            // Petite temporisation: la souris qui traverse la grille en
+            // diagonale ne doit pas declencher quatre telechargements.
+            window.clearTimeout(pending);
+            pending = window.setTimeout(() => {
+              if (!clip.src && clip.dataset.src) {
+                clip.preload = 'auto';
+                clip.src = clip.dataset.src;
+              }
+              clip
+                .play()
+                .then(() => card.classList.add('is-playing'))
+                .catch(() => {
+                  /* pas de lecture: l'illustration reste affichee */
+                });
+            }, 120);
           };
 
           const stop = () => {
+            window.clearTimeout(pending);
             card.classList.remove('is-playing');
             clip.pause();
             // Repart du debut au prochain survol, sinon on reprend en plein

@@ -15,5 +15,8 @@ npm run dev      # http://localhost:4321
 npm run deploy   # build + publication sur GitHub Pages
 ```
 
+Les vidéos et images servies sont des versions allégées, régénérées depuis
+`assets-original/` (non versionné) par `node scripts/media.mjs`.
+
 Le site en ligne est servi depuis la branche `gh-pages`, qui ne contient que le
 résultat du build. `npm run deploy` s'occupe de la régénérer.

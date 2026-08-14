@@ -98,12 +98,11 @@ const {
     object-fit: cover;
   }
 
+  /* Seul transform est anime: une transition sur filter repeint l'image entiere
+     a chaque frame, transform reste sur le GPU. */
   .card__still {
     transform: scale(1.005);
-    filter: saturate(0.9) contrast(1.02);
-    transition:
-      transform 0.8s var(--ease),
-      filter 0.6s var(--ease);
+    transition: transform 0.8s var(--ease);
   }
 
   /* La video reste invisible tant que le survol ne l'a pas lancee. */
@@ -119,7 +118,6 @@ const {
   .card:hover .card__still,
   .card:focus-visible .card__still {
     transform: scale(1.03);
-    filter: saturate(1) contrast(1.02);
   }
 
   /* Voile discret qui s'estompe au survol. */
@@ -147,8 +145,9 @@ const {
     left: 0.75rem;
     z-index: 2;
     padding: 0.3rem 0.5rem;
-    background: color-mix(in srgb, var(--bg) 70%, transparent);
-    backdrop-filter: blur(6px);
+    /* Fond opaque plutot qu'un backdrop-filter: le flou etait recalcule a chaque
+       frame de la video qui passe dessous. */
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
     color: var(--accent);
     border-radius: 2px;
   }
