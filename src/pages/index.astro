@@ -150,22 +150,21 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.6;
+    opacity: 0.92;
   }
 
   .hero__bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    /* Juste assez de voile pour que le titre reste lisible en bas, sans
-       eteindre l'image. */
-    background:
-      radial-gradient(
-        120% 80% at 70% 30%,
-        transparent,
-        color-mix(in srgb, var(--bg) 55%, transparent) 75%
-      ),
-      linear-gradient(to top, var(--bg) 1%, transparent 45%);
+    /* Plus de voile global: seulement un fondu dans le bas de l'ecran, la ou se
+       posent le titre et l'intro, et pour raccorder au fond de la page. */
+    background: linear-gradient(
+      to top,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 55%, transparent) 22%,
+      transparent 50%
+    );
   }
 
   .hero__inner {
@@ -205,9 +204,18 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
     border-top: 1px solid var(--line);
   }
 
+  /* Les petits textes passent sur l'image sans voile pour les proteger: une
+     ombre diffuse suffit a les detacher. Le titre, lui, n'en prend pas: son
+     masque de defilement couperait l'ombre au bord de chaque lettre. */
+  .hero__eyebrow,
+  .hero__intro,
+  .hero__scroll {
+    text-shadow: 0 1px 16px color-mix(in srgb, var(--bg) 80%, transparent);
+  }
+
   .hero__intro {
     max-width: 52ch;
-    color: var(--text-dim);
+    color: var(--text);
   }
 
   .hero__scroll {
