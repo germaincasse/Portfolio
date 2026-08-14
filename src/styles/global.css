@@ -70,10 +70,11 @@ body {
 }
 
 /* Grain filmique par-dessus toute la page.
-   Pas de mix-blend-mode ici: un blend plein ecran en position fixed force le
-   navigateur a recomposer tout le viewport a chaque frame de scroll, ce qui
-   suffisait a faire ramer la page entiere. Une simple opacite donne le meme
-   grain sur un fond aussi sombre, et la couche peut rester sur le GPU. */
+   Toujours pas de mix-blend-mode: un blend plein ecran en position fixed force
+   le navigateur a recomposer tout le viewport a chaque frame de scroll, et
+   c'etait la cause du lag. Le grain est donc une texture RGBA dont le canal
+   alpha porte le bruit (points clairs et sombres sur fond transparent), ce qui
+   donne le meme rendu qu'un overlay sans rien couter au scroll. */
 body::after {
   content: '';
   position: fixed;
@@ -81,8 +82,8 @@ body::after {
   z-index: 9999;
   pointer-events: none;
   background-image: var(--grain-src);
-  background-size: 180px 180px;
-  opacity: 0.035;
+  background-size: 200px 200px;
+  opacity: 0.5;
 }
 
 img,

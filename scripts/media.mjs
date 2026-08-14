@@ -24,14 +24,15 @@ const VIDEOS = [
   { from: 'starborn-cover.mp4', to: 'media/starborn/cover.mp4', width: 960, crf: 32 },
   { from: 'death-drive-cover.mp4', to: 'media/death-drive/cover.mp4', width: 960, crf: 32 },
   { from: 'augury-point-cover.mp4', to: 'media/augury-point/cover.mp4', width: 960, crf: 32 },
-  // Le hero est desature a l'encodage plutot qu'avec un filter CSS, qui serait
-  // repaye a chaque frame de lecture.
+  // Le hero est etalonne a l'encodage plutot qu'avec un filter CSS, qui serait
+  // repaye a chaque frame de lecture. Legerement eclairci: la video passe en
+  // fond derriere le titre et se retrouve vite trop sombre.
   {
     from: 'home-reel.mp4',
     to: 'media/home/reel.mp4',
     width: 960,
     crf: 33,
-    grade: 'eq=saturation=0.7:contrast=1.05',
+    grade: 'eq=saturation=0.85:contrast=1.0:brightness=0.06',
   },
 ];
 

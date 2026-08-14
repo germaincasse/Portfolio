@@ -33,20 +33,10 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
   accent={d.accent}
 >
   <article class="project">
-    <!-- Header -->
-    <header class="wrap project__head">
-      <a class="back mono" href={asset('/work')}>
-        <span aria-hidden="true">←</span> All work
-      </a>
-
-      <p class="mono project__index">({pad(index)})</p>
-      <h1 class="project__title display">{d.title}</h1>
-      <p class="project__tagline">{d.tagline}</p>
-    </header>
-
-    <!-- Media principal -->
-    <div class="wrap">
-      <div class="project__hero">
+    <!-- Ecran d'ouverture: le gameplay tient tout l'ecran, le titre est pose
+         dessus, et tout remonte normalement au scroll. -->
+    <header class="stage">
+      <div class="stage__media" aria-hidden="true">
         {
           d.cover ? (
             <video
@@ -57,14 +47,26 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
               muted
               loop
               playsinline
-              controls
+              tabindex="-1"
             />
           ) : (
-            <img src={asset(d.poster)} alt={`${d.title} screenshot`} />
+            <img src={asset(d.poster)} alt="" />
           )
         }
       </div>
-    </div>
+
+      <div class="wrap stage__inner">
+        <a class="back mono" href={asset('/#work')}>
+          <span aria-hidden="true">←</span> All projects
+        </a>
+
+        <div class="stage__bottom">
+          <p class="mono project__index">({pad(index)})</p>
+          <h1 class="project__title display">{d.title}</h1>
+          <p class="project__tagline">{d.tagline}</p>
+        </div>
+      </div>
+    </header>
 
     <!-- Meta + texte -->
     <div class="wrap project__grid">
@@ -147,14 +149,56 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
 </Base>
 
 <style>
-  .project__head {
-    padding-block: clamp(2rem, 6vh, 4rem) clamp(1.5rem, 4vw, 2.5rem);
+  /* 4rem = hauteur du header sticky, pour que l'ouverture fasse exactement un
+     ecran sans deborder. */
+  .stage {
+    position: relative;
+    display: flex;
+    min-height: calc(100svh - 4rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .stage__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bg-sunken);
+  }
+
+  .stage__media video,
+  .stage__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Fondu vers le noir en bas: le titre reste lisible et l'image se raccorde
+     au fond de la page qui suit. */
+  .stage__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      var(--bg) 1%,
+      color-mix(in srgb, var(--bg) 55%, transparent) 45%,
+      color-mix(in srgb, var(--bg) 15%, transparent) 100%
+    );
+  }
+
+  .stage__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    width: 100%;
+    padding-block: clamp(1.5rem, 4vh, 2.5rem) clamp(2.5rem, 7vh, 5rem);
   }
 
   .back {
-    display: inline-block;
-    color: var(--text-faint);
-    margin-bottom: clamp(2rem, 6vw, 4rem);
+    align-self: flex-start;
+    color: var(--text-dim);
     transition: color 0.3s var(--ease);
   }
 
@@ -176,22 +220,7 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
     margin-top: 1.5rem;
     max-width: 56ch;
     font-size: clamp(1.0625rem, 1.6vw, 1.375rem);
-    color: var(--text-dim);
-  }
-
-  .project__hero {
-    aspect-ratio: 16 / 9;
-    max-height: 82svh;
-    overflow: hidden;
-    background: var(--bg-sunken);
-    border-radius: 3px;
-  }
-
-  .project__hero video,
-  .project__hero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    color: var(--text);
   }
 
   .project__grid {

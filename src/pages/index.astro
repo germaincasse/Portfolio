@@ -7,9 +7,10 @@ import SlotTitle from '../components/SlotTitle.astro';
 import { site } from '../site';
 import { asset } from '../utils';
 
-const projects = (await getCollection('projects', ({ data }) => !data.draft))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 4);
+// Tous les projets sont sur la home: c'est la seule page qui les liste.
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 ---
 
 <Base>
@@ -74,9 +75,6 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
       }
     </div>
 
-    <a class="all-work mono" href={asset('/work')}>
-      All projects <span aria-hidden="true">→</span>
-    </a>
   </section>
 
   <!-- ================= CAPABILITIES ================= -->
@@ -146,26 +144,28 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     z-index: -1;
   }
 
-  /* La desaturation est encodee dans le mp4 (voir scripts/media.mjs): un filter
-     CSS sur une video plein ecran se repaie a chaque frame de lecture. */
+  /* L'etalonnage est encode dans le mp4 (voir scripts/media.mjs): un filter CSS
+     sur une video plein ecran se repaie a chaque frame de lecture. */
   .hero__bg video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.32;
+    opacity: 0.6;
   }
 
   .hero__bg::after {
     content: '';
     position: absolute;
     inset: 0;
+    /* Juste assez de voile pour que le titre reste lisible en bas, sans
+       eteindre l'image. */
     background:
       radial-gradient(
         120% 80% at 70% 30%,
         transparent,
-        color-mix(in srgb, var(--bg) 88%, transparent) 70%
+        color-mix(in srgb, var(--bg) 55%, transparent) 75%
       ),
-      linear-gradient(to top, var(--bg) 2%, transparent 60%);
+      linear-gradient(to top, var(--bg) 1%, transparent 45%);
   }
 
   .hero__inner {
@@ -249,25 +249,6 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     .cards {
       grid-template-columns: 1fr;
     }
-  }
-
-  .all-work {
-    display: inline-block;
-    margin-top: clamp(2rem, 5vw, 3rem);
-    padding: 0.85rem 1.3rem;
-    border: 1px solid var(--line);
-    border-radius: 2px;
-    color: var(--text);
-    transition:
-      background 0.3s var(--ease),
-      color 0.3s var(--ease),
-      border-color 0.3s var(--ease);
-  }
-
-  .all-work:hover {
-    background: var(--text);
-    border-color: var(--text);
-    color: var(--bg);
   }
 
   /* ---------------- Capabilities ---------------- */

@@ -55,7 +55,7 @@ export const site = {
 
   /** Navigation du header. */
   nav: [
-    { label: 'Work', href: '/work' },
+    { label: 'Work', href: '/#work' },
     { label: 'About', href: '/#about' },
     { label: 'Contact', href: '/#contact' },
   ],
