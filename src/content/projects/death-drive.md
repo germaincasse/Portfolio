@@ -26,5 +26,5 @@ A narrative engine on top of Godot: a script format the writer edits directly,
 branching and flag tracking across chapters, saves that work mid-scene, and the
 presentation layer for characters, transitions and dialogue timing.
 
-The goal was that nobody needs to open the engine to change a line — the script is
+The goal was that nobody needs to open the engine to change a line: the script is
 the source of truth.

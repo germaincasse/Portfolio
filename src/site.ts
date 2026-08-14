@@ -6,7 +6,7 @@ export const site = {
   name: 'Germain Cassé',
   shortName: 'Germain Cassé',
   role: 'Game Developer',
-  location: 'Remote — currently Batumi, GE',
+  location: 'Remote, currently Batumi, GE',
   email: 'germaincasse@gmail.com',
   description:
     'Game developer working in Unity and Godot. Contract work, from prototype to release.',
