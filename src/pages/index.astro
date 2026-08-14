@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import SlotTitle from '../components/SlotTitle.astro';
 import { site } from '../site';
 import { asset } from '../utils';
 
@@ -29,12 +30,11 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     <div class="wrap hero__inner">
       <p class="mono hero__eyebrow">
         <span class="hero__eyebrow-dot" aria-hidden="true"></span>
-        Unity &middot; Godot &middot; Solo dev &middot; Available for contract work
+        {site.role} &middot; Unity &amp; Godot &middot; Available for contract work
       </p>
 
-      <h1 class="hero__title display">
-        <span>{site.hero.line1}</span>
-        <span>{site.hero.line2}</span>
+      <h1 class="hero__title display" aria-label={site.name}>
+        <SlotTitle text={site.name} />
       </h1>
 
       <div class="hero__bottom">
@@ -51,7 +51,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     <SectionHead
       index="01"
       title="Selected work"
-      note="Shipped games and client projects, PC and mobile."
+      note="Contract and personal projects, PC and mobile."
     />
 
     <div class="cards">
@@ -84,7 +84,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     <SectionHead
       index="02"
       title="What I do"
-      note="Hired for the code. Occasionally for everything else."
+      note="What I take on, and what I use."
     />
 
     <ul class="caps">
@@ -119,7 +119,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
 
     <div class="about reveal">
       <p class="about__lead display">
-        Solo developer.<br />Contract work.<br />Shipped games.
+        Solo developer,<br />contract work.
       </p>
       <div class="about__body">
         {site.about.map((p) => <p>{p}</p>)}
@@ -186,19 +186,11 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     background: var(--accent);
   }
 
-  /* Taille calibree sur le mot le plus long ("Developer") pour qu'il tienne
-     exactement dans la gouttiere, du mobile au 4K. */
+  /* "GERMAIN CASSE" tient sur une ligne des qu'il y a la place; en dessous,
+     le titre passe a la ligne tout seul (flex-wrap dans SlotTitle). */
   .hero__title {
-    font-size: clamp(2.75rem, 12vw, 12rem);
+    font-size: clamp(2.5rem, 11vw, 11rem);
     font-stretch: 112%;
-  }
-
-  .hero__title span {
-    display: block;
-  }
-
-  .hero__title span:last-child {
-    color: var(--text-dim);
   }
 
   .hero__bottom {
@@ -244,9 +236,18 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
     padding-bottom: var(--section-gap);
   }
 
+  /* Deux colonnes: les illustrations occupent presque toute la largeur utile,
+     la gouttiere reste fine pour ne pas casser le bloc. */
   .cards {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.75rem, 3.5vw, 3.5rem) clamp(1rem, 1.6vw, 1.5rem);
+  }
+
+  @media (max-width: 48rem) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
   }
 
   .all-work {

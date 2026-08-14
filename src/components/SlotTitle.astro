@@ -1,0 +1,142 @@
+---
+/**
+ * Titre "machine a sous": chaque lettre defile verticalement derriere un masque
+ * invisible, plusieurs glyphes passent a l'ecran, puis la bonne lettre se cale.
+ * Les lettres demarrent en decale (stagger) pour l'effet cascade.
+ *
+ * Tout est genere au build: aucun JS n'est necessaire au rendu. Sans JS (ou en
+ * prefers-reduced-motion) le titre est simplement fige sur la bonne lettre.
+ */
+interface Props {
+  /** Texte affiche. Les espaces separent les mots (retour a la ligne possible). */
+  text: string;
+  /** Nombre de glyphes qui defilent avant la vraie lettre. */
+  spin?: number;
+  /** Decalage entre deux lettres voisines, en ms. */
+  stagger?: number;
+  /** Duree du defilement d'une lettre, en ms. */
+  duration?: number;
+  class?: string;
+}
+
+const {
+  text,
+  spin = 14,
+  stagger = 65,
+  duration = 1100,
+  class: className,
+} = Astro.props;
+
+// Sous-ensemble volontairement sans les glyphes extremes (I, J, L, M, W...):
+// chaque cellule est calee sur la largeur de la vraie lettre, donc un glyphe
+// beaucoup plus large deborderait lateralement pendant le defilement.
+const GLYPHS = 'ABCDEFGHKNOPRSTUVXYZ';
+const pick = () => GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+
+// Un index global croissant sur toutes les lettres, pour que la cascade
+// traverse les mots sans repartir de zero a chaque mot.
+let cursor = 0;
+const words = text.split(' ').map((word) =>
+  [...word].map((char) => ({
+    char,
+    index: cursor++,
+    // La derniere case du rouleau est la vraie lettre.
+    reel: Array.from({ length: spin }, pick),
+  })),
+);
+
+const total = spin + 1;
+---
+
+<span
+  class:list={['slot', className]}
+  style={`--slot-n:${total}; --slot-stagger:${stagger}ms; --slot-dur:${duration}ms;`}
+>
+  {
+    words.map((word) => (
+      <span class="slot__word" aria-hidden="true">
+        {word.map(({ char, index, reel }) => (
+          <span class="slot__cell" style={`--i:${index};`}>
+            {/* Fantome: c'est lui qui donne sa largeur a la cellule, pour que le
+                titre stabilise garde l'espacement naturel du mot. */}
+            <span class="slot__ghost">{char}</span>
+            <span class="slot__reel">
+              {reel.map((g) => (
+                <span class="slot__glyph">{g}</span>
+              ))}
+              <span class="slot__glyph">{char}</span>
+            </span>
+          </span>
+        ))}
+      </span>
+    ))
+  }
+</span>
+
+<style>
+  .slot {
+    /* Un peu plus haut qu'un cadratin: laisse passer les accents (CASSE). */
+    --slot-cell: 1.12em;
+
+    display: flex;
+    flex-wrap: wrap;
+    /* Gouttiere entre les mots, proportionnelle a la taille du titre. */
+    gap: 0 0.26em;
+  }
+
+  .slot__word {
+    display: flex;
+  }
+
+  /* Le "cadre invisible": tout ce qui depasse est coupe. */
+  .slot__cell {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    height: var(--slot-cell);
+  }
+
+  .slot__ghost {
+    display: block;
+    height: var(--slot-cell);
+    line-height: var(--slot-cell);
+    visibility: hidden;
+  }
+
+  .slot__reel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Position finale: derniere case du rouleau, donc la vraie lettre. */
+    transform: translateY(calc(var(--slot-cell) * (var(--slot-n) - 1) * -1));
+  }
+
+  .slot__glyph {
+    display: block;
+    height: var(--slot-cell);
+    line-height: var(--slot-cell);
+    text-align: center;
+  }
+
+  /* L'animation ne s'active qu'avec JS: sinon le titre est deja en place. */
+  html.js .slot__reel {
+    animation: slot-spin var(--slot-dur) cubic-bezier(0.16, 0.84, 0.24, 1) both;
+    animation-delay: calc(var(--i) * var(--slot-stagger));
+  }
+
+  @keyframes slot-spin {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(var(--slot-cell) * (var(--slot-n) - 1) * -1));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .slot__reel {
+      animation: none;
+    }
+  }
+</style>

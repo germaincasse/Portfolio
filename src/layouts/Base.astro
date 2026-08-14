@@ -87,18 +87,18 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
         revealables.forEach((el) => el.classList.add('is-in'));
       }
 
-      // --- Lecture des videos uniquement quand elles sont visibles ----------
-      // Les .mp4 sont lourds: preload="none" dans le HTML, on ne charge et ne
-      // joue que ce que l'utilisateur regarde vraiment.
-      const videos =
-        document.querySelectorAll<HTMLVideoElement>('video[data-lazy]');
       const conn = (navigator as any).connection;
       const saveData = Boolean(conn?.saveData);
       const reduced = window.matchMedia(
         '(prefers-reduced-motion: reduce)',
       ).matches;
 
-      if (videos.length && !saveData && !reduced && 'IntersectionObserver' in window) {
+      // --- Fond du hero: joue quand il est a l'ecran ------------------------
+      // preload="none" dans le HTML, on ne charge que si la section est vue.
+      const ambient =
+        document.querySelectorAll<HTMLVideoElement>('video[data-lazy]');
+
+      if (ambient.length && !saveData && !reduced && 'IntersectionObserver' in window) {
         const vio = new IntersectionObserver(
           (entries) => {
             for (const e of entries) {
@@ -116,7 +116,47 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
           },
           { threshold: 0.25 },
         );
-        videos.forEach((v) => vio.observe(v));
+        ambient.forEach((v) => vio.observe(v));
+      }
+
+      // --- Cartes projet: l'illustration par defaut, la video au survol -----
+      // Rien n'est telecharge tant que la souris n'entre pas dans la carte, ce
+      // qui evite de tirer quatre mp4 au chargement de la home.
+      const clips =
+        document.querySelectorAll<HTMLVideoElement>('video[data-hover-video]');
+      const canHover = window.matchMedia('(hover: hover)').matches;
+
+      if (clips.length && canHover && !saveData && !reduced) {
+        for (const clip of clips) {
+          const card = clip.closest<HTMLElement>('.card');
+          if (!card) continue;
+
+          const start = () => {
+            if (!clip.src && clip.dataset.src) {
+              clip.preload = 'auto';
+              clip.src = clip.dataset.src;
+            }
+            clip
+              .play()
+              .then(() => card.classList.add('is-playing'))
+              .catch(() => {
+                /* pas de lecture: l'illustration reste affichee */
+              });
+          };
+
+          const stop = () => {
+            card.classList.remove('is-playing');
+            clip.pause();
+            // Repart du debut au prochain survol, sinon on reprend en plein
+            // milieu d'un plan.
+            clip.currentTime = 0;
+          };
+
+          card.addEventListener('pointerenter', start);
+          card.addEventListener('pointerleave', stop);
+          card.addEventListener('focusin', start);
+          card.addEventListener('focusout', stop);
+        }
       }
     </script>
   </body>

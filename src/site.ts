@@ -9,14 +9,11 @@ export const site = {
   location: 'Remote — currently Batumi, GE',
   email: 'germaincasse@gmail.com',
   description:
-    'Solo game developer working in Unity and Godot. I take games from prototype to release — gameplay systems, tools and shipping.',
+    'Game developer working in Unity and Godot. Contract work, from prototype to release.',
 
-  /** Deux lignes du hero. */
   hero: {
-    line1: 'Game',
-    line2: 'Developer',
     intro:
-      'I build and ship games in Unity and Godot — gameplay systems, tools, and the unglamorous plumbing that gets a project to release. Solo, freelance, from anywhere.',
+      'I build games in Unity and Godot, mostly on contract. Gameplay code, tools, and getting builds out.',
   },
 
   /** Bloc "What I do" de la home. */
@@ -24,27 +21,27 @@ export const site = {
     {
       icon: '/icons/games.png',
       title: 'Game Development',
-      body: 'Full production in Unity and Godot, PC and mobile. Gameplay systems, multiplayer, editor tooling, performance work and release builds.',
+      body: 'Unity and Godot, PC and mobile. Gameplay systems, multiplayer, editor tools, release builds.',
       stack: ['Unity', 'Godot', 'C#', 'GDScript'],
     },
     {
       icon: '/icons/software.png',
       title: 'Software Development',
-      body: 'Front-end and back-end when a game needs more than a client: dashboards, APIs, live content pipelines and player-facing tools.',
+      body: 'Front-end and back-end when a project needs more than a game client: APIs, dashboards, content pipelines.',
       stack: ['React', 'Node', 'SQL'],
     },
     {
       icon: '/icons/ai.png',
       title: 'AI & Data',
-      body: 'Machine learning and data pipelines in Python — content generation, analytics on player data, and automation around production.',
+      body: 'Python for machine learning and data work: content generation, analytics, automation.',
       stack: ['Python', 'PyTorch', 'TensorFlow'],
     },
   ],
 
   /** Bloc "About". */
   about: [
-    'I am Germain, a French developer who ships games solo. Most of my work is contract: a studio or a solo creative has a game to get out, and I handle the code from grey-box prototype to store page.',
-    'That means gameplay systems, engine tooling, build pipelines and the last twenty percent nobody wants to touch. Unity and Godot are home, but I have shipped web and Python work too when a project needed it.',
+    'I am Germain, a French developer. Most of my work is contract: a studio or a solo creative needs a game built, and I write the code.',
+    'Gameplay systems, engine tools, build pipelines. Unity and Godot mostly, plus web and Python when a project calls for it.',
     'I work remotely, currently from Georgia. Available for contract work.',
   ],
 

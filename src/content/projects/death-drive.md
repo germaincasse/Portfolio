@@ -18,13 +18,13 @@ draft: false
 ---
 
 Two people, one car, and a road that stops behaving like a road. A branching visual
-novel about what the passenger seat sees and the driver refuses to.
+novel spread across several chapters.
 
 ## What I built
 
 A narrative engine on top of Godot: a script format the writer edits directly,
-branching and flag tracking across chapters, saves that survive mid-scene, and the
-presentation layer that puts characters, transitions and dialogue timing on screen.
+branching and flag tracking across chapters, saves that work mid-scene, and the
+presentation layer for characters, transitions and dialogue timing.
 
-The rule was that nobody should have to open the engine to change a line. The
-script is the source of truth and the game is what reads it.
+The goal was that nobody needs to open the engine to change a line — the script is
+the source of truth.

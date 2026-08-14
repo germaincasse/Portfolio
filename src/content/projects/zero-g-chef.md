@@ -17,16 +17,14 @@ order: 1
 draft: false
 ---
 
-A co-op cooking game set in orbit, where nothing stays on the counter. Orders come
-in from hungry aliens, ingredients drift across the kitchen, and every throw is a
-physics problem you and your crewmate have to solve together.
+A co-op cooking game set in orbit. Orders come in from alien customers, ingredients
+drift across the kitchen, and nothing stays on the counter.
 
 ## What I built
 
-The whole thing: a networked physics kitchen where every ingredient is a rigidbody
-that has to stay in sync across clients, a modular recipe and order system driving
-the round loop, and the alien customer behaviour that decides how patient it feels
-today.
+All of it: networked physics where each ingredient stays in sync across clients, a
+recipe and order system driving the round loop, and the alien customer behaviour.
 
 Zero gravity turns every object into a projectile, so most of the work went into
-making grab, throw and collision feel fair once latency is in the mix.
+making grab, throw and collision behave the same on both machines once latency is
+in the mix.

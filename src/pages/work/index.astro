@@ -18,7 +18,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
     <SectionHead
       index={String(projects.length).padStart(2, '0')}
       title="Projects"
-      note="Every project below shipped or is in active production."
+      note="Unity and Godot, PC and mobile."
     />
 
     <div class="cards">
@@ -55,7 +55,14 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   }
 
   .cards {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.75rem, 3.5vw, 3.5rem) clamp(1rem, 1.6vw, 1.5rem);
+  }
+
+  @media (max-width: 48rem) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

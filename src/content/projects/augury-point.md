@@ -17,13 +17,12 @@ order: 4
 draft: false
 ---
 
-A small town, a cast you get attached to, and a card-reading mechanic that keeps
-telling you things you would rather not know. Romance on the surface, dread
-underneath.
+A small town, a cast to get attached to, and a card-reading mechanic that keeps
+surfacing things the player would rather not know.
 
 ## What I built
 
-The visual novel framework and the divination system layered on top of it: a card
-draw that reads the player's history and feeds back into which routes stay open.
-Branching state, route locking, gallery and unlock tracking, plus the horror beats
-that break the visual novel frame on purpose.
+The visual novel framework and the divination system on top of it: a card draw that
+reads the player's history and feeds back into which routes stay open. Branching
+state, route locking, gallery and unlock tracking, plus the horror beats that break
+the visual novel frame on purpose.

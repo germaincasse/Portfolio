@@ -17,15 +17,14 @@ order: 2
 draft: false
 ---
 
-A turn-based duel game where every fight is decided by the deck you brought and the
-order you play it in. Damage types, blocks, statuses and enemy intents all stack:
-the depth comes from how the pieces interact, not from how many there are.
+A turn-based duel game where each fight depends on the deck you brought and the
+order you play it in. Damage types, blocks, statuses and enemy intents stack.
 
 ## What I built
 
-The combat engine and the content pipeline behind it. Cards and enemies are data,
-not code, so new content can be authored and balanced without touching the systems
-that resolve a turn.
+The combat engine and the content pipeline behind it. Cards and enemies are data
+rather than code, so new content gets authored and balanced without touching turn
+resolution.
 
-Scale was the real constraint. Dozens of cards means every interaction has to
-resolve in a predictable order, and every new card has to be cheap to add.
+Scale was the constraint: dozens of cards means every interaction has to resolve in
+a predictable order, and each new card has to be cheap to add.
