@@ -24,9 +24,11 @@ const remote = execFileSync('git', ['remote', 'get-url', 'origin'], {
 }).trim();
 
 console.log(`> build  (base ${BASE_PATH})`);
-execFileSync('npm', ['run', 'build'], {
+// Astro est appele par son entree Node plutot que par `npm run build`: lancer un
+// .cmd sans shell est refuse par Node, et avec shell les arguments ne sont pas
+// echappes (DEP0190).
+execFileSync(process.execPath, [join('node_modules', 'astro', 'astro.js'), 'build'], {
   stdio: 'inherit',
-  shell: true,
   env: { ...process.env, SITE_URL, BASE_PATH },
 });
 
