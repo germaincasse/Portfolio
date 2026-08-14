@@ -82,8 +82,10 @@ body::after {
   z-index: 9999;
   pointer-events: none;
   background-image: var(--grain-src);
-  background-size: 200px 200px;
-  opacity: 0.5;
+  /* Tuile etalee bien au-dela de sa taille native (256px): le grain s'adoucit
+     et la repetition du motif ne se lit plus. */
+  background-size: 420px 420px;
+  opacity: 0.09;
 }
 
 img,

@@ -93,6 +93,22 @@ for (const v of VIDEOS) {
   console.log(`ok    ${v.to}`);
 }
 
+// Grain: le bruit est porte par le canal alpha (ecart au gris moyen), pour que
+// la texture s'applique sans mix-blend-mode, qui coutait un repaint du viewport
+// a chaque frame de scroll. L'intensite finale se regle en CSS (opacity).
+const GRAIN_SRC = join('assets-original', 'images', 'grain-src.png');
+if (existsSync(GRAIN_SRC)) {
+  run([
+    '-y', '-loglevel', 'error',
+    '-i', GRAIN_SRC,
+    '-vf',
+    "format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='clip(abs(r(X,Y)-128)*2,0,255)'",
+    '-frames:v', '1',
+    join('public', 'grain.png'),
+  ]);
+  console.log('ok    grain.png');
+}
+
 for (const img of IMAGES) {
   const src = join('assets-original', img.from);
   if (!existsSync(src)) {
