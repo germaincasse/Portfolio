@@ -37,15 +37,15 @@ const VIDEOS = [
 ];
 
 // Une carte occupe au plus une demi-largeur de page, donc 1280px couvre meme un
-// ecran dense. Les icones sont affichees en 64px.
+// ecran dense. Les icones sont affichees en 96px.
 const IMAGES = [
   { from: 'images/zero-g-chef-shot-01.webp', to: 'media/zero-g-chef/shot-01.webp', width: 1280 },
   { from: 'images/starborn-shot-01.webp', to: 'media/starborn/shot-01.webp', width: 1280 },
   { from: 'images/death-drive-shot-01.webp', to: 'media/death-drive/shot-01.webp', width: 1280 },
   { from: 'images/augury-point-shot-01.webp', to: 'media/augury-point/shot-01.webp', width: 1280 },
-  { from: 'images/games.png', to: 'icons/games.png', width: 128 },
-  { from: 'images/software.png', to: 'icons/software.png', width: 128 },
-  { from: 'images/ai.png', to: 'icons/ai.png', width: 128 },
+  { from: 'images/games.png', to: 'icons/games.png', width: 256 },
+  { from: 'images/software.png', to: 'icons/software.png', width: 256 },
+  { from: 'images/ai.png', to: 'icons/ai.png', width: 256 },
 ];
 
 const run = (args) => execFileSync(ffmpeg, args, { stdio: ['ignore', 'ignore', 'inherit'] });
