@@ -114,7 +114,12 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   <section class="section wrap" id="about">
     <SectionHead index="03" title="About" />
 
-    <p class="about reveal">{site.about}</p>
+    <div class="about reveal">
+      <p class="about__lead">{site.about.lead}</p>
+      <div class="about__body">
+        {site.about.body.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
   </section>
 </Base>
 
@@ -300,10 +305,35 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 
   /* ---------------- About ---------------- */
   .about {
-    max-width: 28ch;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .about__lead {
+    max-width: 20ch;
     font-size: clamp(1.5rem, 3.2vw, 2.75rem);
     line-height: 1.15;
     letter-spacing: -0.02em;
     color: var(--text);
+  }
+
+  .about__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 62ch;
+    color: var(--text-dim);
+  }
+
+  /* Le premier paragraphe est le plus lu: il reste en blanc. */
+  .about__body p:first-child {
+    color: var(--text);
+  }
+
+  @media (max-width: 52rem) {
+    .about {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

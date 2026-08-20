@@ -35,9 +35,16 @@ export const site = {
     },
   ],
 
-  /** Bloc "About": le paragraphe repris du portfolio d'origine. */
-  about:
-    'I am Germain, a young developer from France looking for new opportunities!',
+  /** Bloc "About": la phrase d'accroche, puis le corps du texte. */
+  about: {
+    lead: 'I am Germain, a young developer from France looking for new opportunities!',
+    body: [
+      'I build games in Unity and Godot. Gameplay systems, narrative engines, networked physics, and the editor tools that let a team add content without going back into the code every time.',
+      'Most of that has been client work: a studio or a solo creative has a game to make, and I take care of the code from prototype to release build. Card battlers, visual novels, co-op multiplayer.',
+      'Outside of games I also work on the web, front-end and back-end, and in Python for machine learning and data. Whatever a project needs around the game itself.',
+      'I am looking for a full-time position as much as for freelance projects. If you have something in mind, my inbox is open.',
+    ],
+  },
 
   /**
    * Liens du footer / contact. Ajouter ou retirer librement, ex:
