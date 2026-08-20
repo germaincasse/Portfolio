@@ -14,9 +14,16 @@ const year = new Date().getFullYear();
     <div class="contact__grid">
       <div>
         <p class="mono contact__key">Email</p>
-        <a class="contact__val link-underline" href={`mailto:${site.email}`}>
-          {site.email}
-        </a>
+        <span class="contact__mail">
+          <a class="contact__val link-underline" href={`mailto:${site.email}`}>
+            {site.email}
+          </a>
+          {/* Tout le monde n'a pas de client mail associe au protocole mailto:
+              chez soi. Sans ce bouton, le lien ne fait rien pour ces visiteurs. */}
+          <button class="contact__copy mono" type="button" data-copy={site.email}>
+            Copy
+          </button>
+        </span>
       </div>
       <div>
         <p class="mono contact__key">Status</p>
@@ -100,6 +107,33 @@ const year = new Date().getFullYear();
     gap: 0.5rem;
   }
 
+  .contact__mail {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .contact__copy {
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    color: var(--text-faint);
+    transition:
+      color 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .contact__copy:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
+  .contact__copy.is-done {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
   .contact__dot {
     width: 7px;
     height: 7px;
@@ -142,3 +176,40 @@ const year = new Date().getFullYear();
     }
   }
 </style>
+
+<script>
+  // Copie de l'adresse mail. Le lien mailto reste la pour ceux qui ont un
+  // client configure; ce bouton sert a tous les autres.
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-copy]');
+
+  for (const button of buttons) {
+    button.addEventListener('click', async () => {
+      const value = button.dataset.copy;
+      if (!value) return;
+
+      try {
+        await navigator.clipboard.writeText(value);
+      } catch {
+        // Presse-papier refuse: on selectionne le texte pour que la copie
+        // manuelle reste possible.
+        const link = button.previousElementSibling;
+        if (link) {
+          const range = document.createRange();
+          range.selectNodeContents(link);
+          const selection = window.getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        }
+        return;
+      }
+
+      const original = button.textContent;
+      button.textContent = 'Copied';
+      button.classList.add('is-done');
+      window.setTimeout(() => {
+        button.textContent = original;
+        button.classList.remove('is-done');
+      }, 1800);
+    });
+  }
+</script>
