@@ -8,7 +8,7 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <p class="mono contact__label">( Contact )</p>
     <a class="contact__cta display" href={`mailto:${site.email}`}>
-      Let's build<br />your game
+      Let's work<br />together
     </a>
 
     <div class="contact__grid">
@@ -19,14 +19,10 @@ const year = new Date().getFullYear();
         </a>
       </div>
       <div>
-        <p class="mono contact__key">Based in</p>
-        <p class="contact__val">{site.location}</p>
-      </div>
-      <div>
         <p class="mono contact__key">Status</p>
         <p class="contact__val contact__val--free">
           <span class="contact__dot" aria-hidden="true"></span>
-          Open to contract work
+          {site.availability}
         </p>
       </div>
     </div>

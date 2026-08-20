@@ -157,23 +157,30 @@ button {
   left: 0;
 }
 
-/* Titre de section: label mono + filet */
+/* Titre de section: numero mono + titre plein format */
 .section-head {
   display: flex;
   align-items: baseline;
-  gap: 1.25rem;
-  padding-block: 1rem;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding-block: clamp(1rem, 2vw, 1.5rem);
   border-top: 1px solid var(--line);
   margin-bottom: clamp(2rem, 5vw, 4rem);
 }
 .section-head__index {
   color: var(--accent);
+  /* Le numero est cale sur la ligne de base du titre, pas sur sa hauteur. */
+  align-self: flex-start;
+  padding-top: 0.35em;
 }
 .section-head__title {
-  color: var(--text-dim);
+  font-size: clamp(1.875rem, 4.5vw, 3.5rem);
+  font-stretch: 108%;
+  color: var(--text);
 }
 .section-head__note {
   margin-left: auto;
+  align-self: flex-end;
+  padding-bottom: 0.35em;
   color: var(--text-faint);
   text-align: right;
   max-width: 36ch;

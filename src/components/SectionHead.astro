@@ -8,8 +8,8 @@ interface Props {
 const { index, title, note, id } = Astro.props;
 ---
 
-<div class="section-head mono" id={id}>
-  <span class="section-head__index">({index})</span>
-  <h2 class="section-head__title mono">{title}</h2>
+<div class="section-head" id={id}>
+  <span class="section-head__index mono">({index})</span>
+  <h2 class="section-head__title display">{title}</h2>
   {note && <p class="section-head__note mono">{note}</p>}
 </div>

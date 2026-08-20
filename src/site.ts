@@ -6,15 +6,12 @@ export const site = {
   name: 'Germain Cassé',
   shortName: 'Germain Cassé',
   role: 'Game Developer',
-  location: 'Remote, currently Batumi, GE',
   email: 'germaincasse@gmail.com',
   description:
-    'Game developer working in Unity and Godot. Contract work, from prototype to release.',
+    'Game developer working in Unity and Godot. Open to full-time and freelance roles.',
 
-  hero: {
-    intro:
-      'I build games in Unity and Godot, mostly on contract. Gameplay code, tools, and getting builds out.',
-  },
+  /** Ligne d'accroche au-dessus du titre de la home. */
+  availability: 'Open to full-time and freelance roles',
 
   /** Bloc "What I do" de la home. */
   capabilities: [
@@ -38,12 +35,9 @@ export const site = {
     },
   ],
 
-  /** Bloc "About". */
-  about: [
-    'I am Germain, a French developer. Most of my work is contract: a studio or a solo creative needs a game built, and I write the code.',
-    'Gameplay systems, engine tools, build pipelines. Unity and Godot mostly, plus web and Python when a project calls for it.',
-    'I work remotely, currently from Georgia. Available for contract work.',
-  ],
+  /** Bloc "About": le paragraphe repris du portfolio d'origine. */
+  about:
+    'I am Germain, a young developer from France looking for new opportunities!',
 
   /**
    * Liens du footer / contact. Ajouter ou retirer librement, ex:

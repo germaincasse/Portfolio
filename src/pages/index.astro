@@ -31,7 +31,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
     <div class="wrap hero__inner">
       <p class="mono hero__eyebrow">
         <span class="hero__eyebrow-dot" aria-hidden="true"></span>
-        {site.role} &middot; Unity &amp; Godot &middot; Available for contract work
+        {site.role} &middot; Unity &amp; Godot &middot; {site.availability}
       </p>
 
       <h1 class="hero__title display" aria-label={site.name}>
@@ -39,9 +39,8 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
       </h1>
 
       <div class="hero__bottom">
-        <p class="hero__intro">{site.hero.intro}</p>
         <a class="hero__scroll mono" href="#work">
-          Selected work <span aria-hidden="true">↓</span>
+          Projects <span aria-hidden="true">↓</span>
         </a>
       </div>
     </div>
@@ -51,8 +50,8 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   <section class="section wrap" id="work">
     <SectionHead
       index="01"
-      title="Selected work"
-      note="Contract and personal projects, PC and mobile."
+      title="Projects"
+      note="Client and personal projects, PC and mobile."
     />
 
     <div class="cards">
@@ -115,14 +114,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   <section class="section wrap" id="about">
     <SectionHead index="03" title="About" />
 
-    <div class="about reveal">
-      <p class="about__lead display">
-        Solo developer,<br />contract work.
-      </p>
-      <div class="about__body">
-        {site.about.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
+    <p class="about reveal">{site.about}</p>
   </section>
 </Base>
 
@@ -208,14 +200,8 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
      ombre diffuse suffit a les detacher. Le titre, lui, n'en prend pas: son
      masque de defilement couperait l'ombre au bord de chaque lettre. */
   .hero__eyebrow,
-  .hero__intro,
   .hero__scroll {
     text-shadow: 0 1px 16px color-mix(in srgb, var(--bg) 80%, transparent);
-  }
-
-  .hero__intro {
-    max-width: 52ch;
-    color: var(--text);
   }
 
   .hero__scroll {
@@ -314,27 +300,10 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 
   /* ---------------- About ---------------- */
   .about {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-    gap: clamp(2rem, 6vw, 5rem);
-  }
-
-  .about__lead {
+    max-width: 28ch;
     font-size: clamp(1.5rem, 3.2vw, 2.75rem);
-    font-stretch: 104%;
-  }
-
-  .about__body {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    color: var(--text-dim);
-    max-width: 60ch;
-  }
-
-  @media (max-width: 52rem) {
-    .about {
-      grid-template-columns: 1fr;
-    }
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
   }
 </style>
