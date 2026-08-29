@@ -48,6 +48,28 @@ const IMAGES = [
   { from: 'images/ai.png', to: 'icons/ai.png', width: 256 },
 ];
 
+// Eldritch Break n'a pas de cover dediee: elle est montee depuis le trailer.
+// Les extraits ont ete choisis une fois pour toutes en detectant les changements
+// de plan (seuil 0.15) et en ne gardant que des fenetres entierement contenues
+// dans un plan, hors logo d'ouverture (Lunatic Moon, ~2s), hors fondu final et
+// logo de fin (a partir de ~70s), et hors passages noirs.
+const MONTAGES = [
+  {
+    from: 'eldritch-break-trailer.mp4',
+    to: 'media/eldritch-break/cover.mp4',
+    width: 960,
+    // Contenu tres charge (FPS, camera constamment en mouvement): a crf 32 la
+    // meme sequence pesait 1.7 Mo.
+    crf: 36,
+    clips: [
+      [12.283, 14.283], [18.85, 20.85], [21.761, 23.761], [23.872, 25.872],
+      [29.183, 31.183], [32.977, 34.977], [37.63, 39.63], [44.5, 46.5],
+      [49.6, 51.6], [53.1, 55.1],
+    ],
+    poster: { at: 30.1, to: 'media/eldritch-break/shot-01.webp', width: 1280 },
+  },
+];
+
 const run = (args) => execFileSync(ffmpeg, args, { stdio: ['ignore', 'ignore', 'inherit'] });
 
 const widthOf = (file) =>
@@ -91,6 +113,53 @@ for (const v of VIDEOS) {
     out,
   ]);
   console.log(`ok    ${v.to}`);
+}
+
+for (const m of MONTAGES) {
+  const src = join('assets-original', m.from);
+  if (!existsSync(src)) {
+    console.log(`skip  ${m.from} (absent de assets-original/)`);
+    continue;
+  }
+  const out = join('public', m.to);
+  ensureDir(out);
+
+  const trims = m.clips
+    .map(([a, b], i) => `[0:v]trim=start=${a}:end=${b},setpts=PTS-STARTPTS[v${i}]`)
+    .join(';');
+  const concat =
+    m.clips.map((_, i) => `[v${i}]`).join('') + `concat=n=${m.clips.length}:v=1:a=0[cat]`;
+
+  run([
+    '-y', '-loglevel', 'error',
+    '-i', src,
+    '-filter_complex', `${trims};${concat};[cat]scale=${m.width}:-2,fps=24[out]`,
+    '-map', '[out]',
+    '-an',
+    '-c:v', 'libx264',
+    '-profile:v', 'main',
+    '-preset', 'slow',
+    '-crf', String(m.crf),
+    '-pix_fmt', 'yuv420p',
+    '-movflags', '+faststart',
+    out,
+  ]);
+  console.log(`ok    ${m.to}  (${(m.clips.length * (m.clips[0][1] - m.clips[0][0])).toFixed(0)}s)`);
+
+  if (m.poster) {
+    const posterOut = join('public', m.poster.to);
+    ensureDir(posterOut);
+    run([
+      '-y', '-loglevel', 'error',
+      '-ss', String(m.poster.at),
+      '-i', src,
+      '-frames:v', '1',
+      '-vf', `scale=${m.poster.width}:-2`,
+      '-quality', '82',
+      posterOut,
+    ]);
+    console.log(`ok    ${m.poster.to}`);
+  }
 }
 
 // Grain: le bruit est porte par le canal alpha (ecart au gris moyen), pour que

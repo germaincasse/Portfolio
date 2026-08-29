@@ -1,5 +1,6 @@
 ---
-import { asset, pad } from '../utils';
+import SteamIcon from './SteamIcon.astro';
+import { asset, pad, isSteam } from '../utils';
 
 interface Props {
   slug: string;
@@ -13,6 +14,7 @@ interface Props {
   cover?: string;
   poster: string;
   accent: string;
+  links?: readonly { label: string; url: string }[];
 }
 
 const {
@@ -27,6 +29,7 @@ const {
   cover,
   poster,
   accent,
+  links = [],
 } = Astro.props;
 ---
 
@@ -67,7 +70,15 @@ const {
 
   <div class="card__foot">
     <h3 class="card__title display">{title}</h3>
-    <p class="card__meta mono">{role} <span aria-hidden="true">/</span> {engine} <span aria-hidden="true">/</span> {year}</p>
+    <p class="card__meta mono">
+      {role} <span aria-hidden="true">/</span> {engine} <span aria-hidden="true">/</span> {year}
+      {links.some((l) => isSteam(l.url)) && (
+        <>
+          <SteamIcon class="card__steam" />
+          <span class="sr-only">Available on Steam</span>
+        </>
+      )}
+    </p>
     <p class="card__tagline">{tagline}</p>
     <ul class="tags mono">
       {tags.map((t) => <li class="tag">{t}</li>)}
@@ -197,6 +208,17 @@ const {
     color: var(--text-faint);
     text-align: right;
     white-space: nowrap;
+  }
+
+  .card__steam {
+    margin-left: 0.55rem;
+    color: var(--text-dim);
+    vertical-align: -0.2em;
+  }
+
+  .card:hover .card__steam,
+  .card:focus-visible .card__steam {
+    color: var(--accent);
   }
 
   .card__tagline {

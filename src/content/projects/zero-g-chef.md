@@ -1,5 +1,5 @@
 ---
-title: Space Burger (unreleased)
+title: Space Burger
 tagline: A chaotic zero-gravity cooking game where ingredients float and aliens wait. Can you handle the chaos?
 role: Personal project
 engine: Unity

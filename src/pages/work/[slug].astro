@@ -1,7 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { asset, pad } from '../../utils';
+import SteamIcon from '../../components/SteamIcon.astro';
+import { asset, pad, isSteam } from '../../utils';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
@@ -100,12 +101,14 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
               {d.links.map((l) => (
                 <li>
                   <a
-                    class="link-underline"
+                    class="meta__link"
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {l.label} <span aria-hidden="true">↗</span>
+                    {isSteam(l.url) && <SteamIcon />}
+                    <span class="link-underline">{l.label}</span>
+                    <span aria-hidden="true">↗</span>
                   </a>
                 </li>
               ))}
@@ -265,7 +268,10 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
     border-top: 1px solid var(--line-soft);
   }
 
-  .meta__links a {
+  .meta__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     color: var(--accent);
   }
 

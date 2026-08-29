@@ -69,6 +69,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
             cover={p.data.cover}
             poster={p.data.poster}
             accent={p.data.accent}
+            links={p.data.links}
           />
         ))
       }

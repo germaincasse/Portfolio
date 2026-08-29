@@ -11,7 +11,8 @@ poster: /media/augury-point/shot-01.webp
 # Deposer les fichiers dans public/media/augury-point/ puis les lister ici :
 #   - /media/augury-point/shot-02.png
 gallery: []
-links: []
+links:
+  - { label: 'Steam', url: 'https://store.steampowered.com/app/2657430/Augury_Point/' }
 accent: '#e11d2e'
 order: 4
 draft: false

@@ -16,3 +16,12 @@ export const href = asset;
 export function pad(n: number): string {
   return String(n).padStart(2, '0');
 }
+
+/** Vrai pour un lien vers une fiche boutique Steam. */
+export function isSteam(url: string): boolean {
+  try {
+    return new URL(url).hostname.endsWith('steampowered.com');
+  } catch {
+    return false;
+  }
+}

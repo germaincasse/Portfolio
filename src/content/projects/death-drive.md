@@ -11,7 +11,8 @@ poster: /media/death-drive/shot-01.webp
 # Deposer les fichiers dans public/media/death-drive/ puis les lister ici :
 #   - /media/death-drive/shot-02.png
 gallery: []
-links: []
+links:
+  - { label: 'Steam', url: 'https://store.steampowered.com/app/3454520/Death_Drive/' }
 accent: '#5aa8d6'
 order: 3
 draft: false
