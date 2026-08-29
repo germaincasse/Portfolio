@@ -1,6 +1,6 @@
 ---
 title: Eldritch Break
-tagline: A solo boomer-shooter where the level itself lies to you, built on non-newtonian illusions.
+tagline: A fast-paced solo boomer-shooter with hand-painted visuals.
 role: Freelance for LunaticMoon
 engine: Unity
 year: 2026
@@ -15,10 +15,12 @@ order: 0
 draft: false
 ---
 
-A single-player boomer-shooter built around non-euclidean, non-newtonian illusions:
-corridors that do not connect the way they should, geometry that only holds while
-you look at it. Fast weapons, dense arenas, and a world that keeps rearranging
-itself behind your back.
+A single-player boomer-shooter built for speed: dense arenas, weapons that reward
+aggression, and enemies that never give you a moment to stand still.
+
+Everything on screen is hand-painted, which puts the game closer to a moving
+illustration than to a render, and keeps the readability high even when the
+screen fills up.
 
 ## What I built
 
