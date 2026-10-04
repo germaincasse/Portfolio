@@ -20,7 +20,10 @@ const ffmpeg = join(FFMPEG_DIR, 'ffmpeg');
 // Les covers s'affichent sur une demi-largeur de page, le reel du hero passe en
 // fond a 32% d'opacite: 960px suffit aux deux, et 24 fps allege sans se voir.
 const VIDEOS = [
-  { from: 'zero-g-chef-cover.mp4', to: 'media/zero-g-chef/cover.mp4', width: 960, crf: 32 },
+  // Montage fourni par Germain, deja cale sur 15s: rien a decouper.
+  // crf 36 comme Eldritch Break: gameplay 3D en mouvement constant, a crf 32
+  // la meme sequence pesait 1.5 Mo.
+  { from: 'space-burger-portfolio.mp4', to: 'media/zero-g-chef/cover.mp4', width: 960, crf: 36 },
   { from: 'starborn-cover.mp4', to: 'media/starborn/cover.mp4', width: 960, crf: 32 },
   { from: 'death-drive-cover.mp4', to: 'media/death-drive/cover.mp4', width: 960, crf: 32 },
   { from: 'augury-point-cover.mp4', to: 'media/augury-point/cover.mp4', width: 960, crf: 32 },
@@ -39,7 +42,10 @@ const VIDEOS = [
 // Une carte occupe au plus une demi-largeur de page, donc 1280px couvre meme un
 // ecran dense. Les icones sont affichees en 96px.
 const IMAGES = [
-  { from: 'images/zero-g-chef-shot-01.webp', to: 'media/zero-g-chef/shot-01.webp', width: 1280 },
+  // Capsule art du jeu. La version sans logo sert de vignette (le titre est
+  // deja affiche sous la carte), celle avec logo va dans la galerie du projet.
+  { from: 'images/space-burger-capsule.png', to: 'media/zero-g-chef/shot-01.webp', width: 1280 },
+  { from: 'images/space-burger-capsule-logo.png', to: 'media/zero-g-chef/capsule.webp', width: 1280 },
   { from: 'images/starborn-shot-01.webp', to: 'media/starborn/shot-01.webp', width: 1280 },
   { from: 'images/death-drive-shot-01.webp', to: 'media/death-drive/shot-01.webp', width: 1280 },
   { from: 'images/augury-point-shot-01.webp', to: 'media/augury-point/shot-01.webp', width: 1280 },
