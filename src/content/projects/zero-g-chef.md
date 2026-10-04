@@ -10,8 +10,7 @@ poster: /media/zero-g-chef/shot-01.webp
 # Screenshots en plus (le poster ci-dessus est deja affiche en grand).
 # Deposer les fichiers dans public/media/zero-g-chef/ puis les lister ici :
 #   - /media/zero-g-chef/shot-02.png
-gallery:
-  - /media/zero-g-chef/capsule.webp
+gallery: []
 links: []
 accent: '#6ee36e'
 order: 1

@@ -36,16 +36,17 @@ const VIDEOS = [
     width: 960,
     crf: 33,
     grade: 'eq=saturation=0.85:contrast=1.0:brightness=0.06',
+    // Poster pris dans la video elle-meme, pour que le passage de l'image a la
+    // lecture ne se voie pas.
+    poster: { at: 1, to: 'media/home/poster.webp', width: 1280 },
   },
 ];
 
 // Une carte occupe au plus une demi-largeur de page, donc 1280px couvre meme un
 // ecran dense. Les icones sont affichees en 96px.
 const IMAGES = [
-  // Capsule art du jeu. La version sans logo sert de vignette (le titre est
-  // deja affiche sous la carte), celle avec logo va dans la galerie du projet.
+  // Capsule art du jeu, logo compris: c'est l'image qui identifie Space Burger.
   { from: 'images/space-burger-capsule.png', to: 'media/zero-g-chef/shot-01.webp', width: 1280 },
-  { from: 'images/space-burger-capsule-logo.png', to: 'media/zero-g-chef/capsule.webp', width: 1280 },
   { from: 'images/starborn-shot-01.webp', to: 'media/starborn/shot-01.webp', width: 1280 },
   { from: 'images/death-drive-shot-01.webp', to: 'media/death-drive/shot-01.webp', width: 1280 },
   { from: 'images/augury-point-shot-01.webp', to: 'media/augury-point/shot-01.webp', width: 1280 },
@@ -119,6 +120,21 @@ for (const v of VIDEOS) {
     out,
   ]);
   console.log(`ok    ${v.to}`);
+
+  if (v.poster) {
+    const posterOut = join('public', v.poster.to);
+    ensureDir(posterOut);
+    run([
+      '-y', '-loglevel', 'error',
+      '-ss', String(v.poster.at),
+      '-i', src,
+      '-frames:v', '1',
+      '-vf', `scale=${v.poster.width}:-2`,
+      '-quality', '82',
+      posterOut,
+    ]);
+    console.log(`ok    ${v.poster.to}`);
+  }
 }
 
 for (const m of MONTAGES) {
