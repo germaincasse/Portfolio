@@ -85,6 +85,17 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
             <dt>Year</dt>
             <dd>{d.year}</dd>
           </div>
+          {
+            d.status && (
+              <div class="meta__row">
+                <dt>Status</dt>
+                <dd class="meta__status" data-status={d.status}>
+                  <span class="meta__status-dot" aria-hidden="true" />
+                  {d.status}
+                </dd>
+              </div>
+            )
+          }
           <div class="meta__row">
             <dt>Tags</dt>
             <dd>
@@ -259,6 +270,36 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
   .meta__row dd {
     margin: 0;
     color: var(--text);
+  }
+
+  .meta__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .meta__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--status-color, var(--text-faint));
+    flex: none;
+  }
+
+  .meta__status[data-status='Released'] {
+    --status-color: #4ade80;
+  }
+
+  .meta__status[data-status='Demo'] {
+    --status-color: #5aa8d6;
+  }
+
+  .meta__status[data-status='In development'] {
+    --status-color: #e0a03c;
+  }
+
+  .meta__status[data-status='Unreleased'] {
+    --status-color: #66655f;
   }
 
   .meta__links {

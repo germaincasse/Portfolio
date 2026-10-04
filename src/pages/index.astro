@@ -65,6 +65,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
             role={p.data.role}
             engine={p.data.engine}
             year={p.data.year}
+            status={p.data.status}
             tags={p.data.tags}
             cover={p.data.cover}
             poster={p.data.poster}

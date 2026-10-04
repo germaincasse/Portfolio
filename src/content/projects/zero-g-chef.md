@@ -3,7 +3,8 @@ title: Space Burger
 tagline: A chaotic zero-gravity cooking game where ingredients float and aliens wait. Can you handle the chaos?
 role: Personal project
 engine: Unity
-year: 2025
+year: '2025-2026'
+status: In development
 tags: ['Unity', '3D', 'Multiplayer', 'PC']
 cover: /media/zero-g-chef/cover.mp4
 poster: /media/zero-g-chef/shot-01.webp

@@ -4,6 +4,7 @@ tagline: A card-based fighting game with dozens of cards, enemies and build-defi
 role: Freelance project
 engine: Godot
 year: 2025
+status: Unreleased
 tags: ['Godot', '2D', 'Card Game', 'PC']
 cover: /media/starborn/cover.mp4
 poster: /media/starborn/shot-01.webp

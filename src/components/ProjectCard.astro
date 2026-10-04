@@ -9,7 +9,8 @@ interface Props {
   tagline: string;
   role: string;
   engine: string;
-  year: number;
+  year: string;
+  status?: string;
   tags: readonly string[];
   cover?: string;
   poster: string;
@@ -26,6 +27,7 @@ const {
   role,
   engine,
   year,
+  status,
   tags,
   cover,
   poster,
@@ -71,7 +73,17 @@ const {
   </div>
 
   <div class="card__foot">
-    <h3 class="card__title display">{title}</h3>
+    <div class="card__heading">
+      <h3 class="card__title display">{title}</h3>
+      {
+        status && (
+          <p class="card__status mono" data-status={status}>
+            <span class="card__status-dot" aria-hidden="true" />
+            {status}
+          </p>
+        )
+      }
+    </div>
     <p class="card__meta mono">
       {role} <span aria-hidden="true">/</span> {engine} <span aria-hidden="true">/</span> {year}
       {links.some((l) => isSteam(l.url)) && (
@@ -195,10 +207,51 @@ const {
     padding-top: clamp(0.9rem, 1.5vw, 1.25rem);
   }
 
+  .card__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
   .card__title {
     font-size: clamp(1.5rem, 2.4vw, 2.5rem);
     font-stretch: 106%;
     transition: color 0.35s var(--ease);
+  }
+
+  /* Sous-titre d'etat. La couleur est portee par le point, le texte reste
+     sobre: une ligne entiere en couleur vive se battrait avec l'accent du
+     projet juste au-dessus. */
+  .card__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-dim);
+  }
+
+  .card__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--status-color, var(--text-faint));
+    flex: none;
+  }
+
+  .card__status[data-status='Released'] {
+    --status-color: #4ade80;
+  }
+
+  .card__status[data-status='Demo'] {
+    --status-color: #5aa8d6;
+  }
+
+  .card__status[data-status='In development'] {
+    --status-color: #e0a03c;
+  }
+
+  .card__status[data-status='Unreleased'] {
+    --status-color: #66655f;
   }
 
   .card:hover .card__title,

@@ -4,6 +4,7 @@ tagline: A fast-paced solo boomer-shooter with hand-painted visuals.
 role: Freelance for LunaticMoon
 engine: Unity
 year: 2026
+status: Demo
 tags: ['Unity', '3D', 'FPS', 'PC']
 cover: /media/eldritch-break/cover.mp4
 poster: /media/eldritch-break/shot-01.webp

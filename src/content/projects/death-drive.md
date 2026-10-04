@@ -3,7 +3,8 @@ title: Death Drive
 tagline: A road-trip visual novel rich with unexpected phenomena.
 role: Freelance project
 engine: Godot
-year: 2024
+year: 2025
+status: Released
 tags: ['Godot', '2D', 'Visual Novel', 'PC']
 cover: /media/death-drive/cover.mp4
 poster: /media/death-drive/shot-01.webp

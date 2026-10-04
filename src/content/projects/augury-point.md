@@ -4,6 +4,7 @@ tagline: A romance visual novel full of horror and mystery.
 role: Freelance project
 engine: Godot
 year: 2024
+status: Demo
 tags: ['Godot', '2D', 'Visual Novel', 'Card Game', 'PC']
 cover: /media/augury-point/cover.mp4
 poster: /media/augury-point/shot-01.webp

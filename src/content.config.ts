@@ -12,8 +12,15 @@ const projects = defineCollection({
     role: z.string(),
     /** Unity, Godot, Web... affiche a cote du role. */
     engine: z.string(),
-    /** Annee de sortie / de travail. Affichee dans l'index. */
-    year: z.number(),
+    /**
+     * Annee ou periode de travail. Un nombre dans le markdown est accepte et
+     * converti, pour que "2025" et "2025-2026" cohabitent.
+     */
+    year: z.coerce.string(),
+    /** Ou en est le projet. Affiche sous le titre et dans la fiche. */
+    status: z
+      .enum(['Released', 'Demo', 'In development', 'Unreleased'])
+      .optional(),
     /** Petites etiquettes mono sous le titre. */
     tags: z.array(z.string()).default([]),
     /** Video de couverture (chemin depuis /public). Optionnelle. */
