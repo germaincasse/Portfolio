@@ -13,6 +13,7 @@ interface Props {
   tags: readonly string[];
   cover?: string;
   poster: string;
+  preview?: string;
   accent: string;
   links?: readonly { label: string; url: string }[];
 }
@@ -28,6 +29,7 @@ const {
   tags,
   cover,
   poster,
+  preview,
   accent,
   links = [],
 } = Astro.props;
@@ -44,7 +46,7 @@ const {
         la souris n'est pas sur la carte. */}
     <img
       class="card__still"
-      src={asset(poster)}
+      src={asset(preview ?? poster)}
       alt=""
       loading="lazy"
       decoding="async"

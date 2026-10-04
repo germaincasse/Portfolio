@@ -20,6 +20,13 @@ const projects = defineCollection({
     cover: z.string().optional(),
     /** Image affichee avant que la video charge + fallback mobile. */
     poster: z.string(),
+    /**
+     * Vignette de la carte sur la home, quand elle doit differer du poster:
+     * typiquement le capsule art du jeu. Le poster, lui, reste une image tiree
+     * de la video, sinon le capsule clignote en plein ecran au chargement de la
+     * page projet. Par defaut, la carte reprend le poster.
+     */
+    preview: z.string().optional(),
     /** Screenshots supplementaires sur la page projet. */
     gallery: z.array(z.string()).default([]),
     /** Liens externes: itch.io, Steam, trailer, GitHub... */

@@ -7,6 +7,7 @@ year: 2026
 tags: ['Unity', '3D', 'FPS', 'PC']
 cover: /media/eldritch-break/cover.mp4
 poster: /media/eldritch-break/shot-01.webp
+preview: /media/eldritch-break/capsule.webp
 gallery: []
 links:
   - { label: 'Steam', url: 'https://store.steampowered.com/app/4438400/Eldritch_Break/' }

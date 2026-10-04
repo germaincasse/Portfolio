@@ -7,6 +7,7 @@ year: 2024
 tags: ['Godot', '2D', 'Visual Novel', 'PC']
 cover: /media/death-drive/cover.mp4
 poster: /media/death-drive/shot-01.webp
+preview: /media/death-drive/capsule.webp
 # Screenshots en plus (le poster ci-dessus est deja affiche en grand).
 # Deposer les fichiers dans public/media/death-drive/ puis les lister ici :
 #   - /media/death-drive/shot-02.png

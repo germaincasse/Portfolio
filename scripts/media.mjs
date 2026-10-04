@@ -23,7 +23,13 @@ const VIDEOS = [
   // Montage fourni par Germain, deja cale sur 15s: rien a decouper.
   // crf 36 comme Eldritch Break: gameplay 3D en mouvement constant, a crf 32
   // la meme sequence pesait 1.5 Mo.
-  { from: 'space-burger-portfolio.mp4', to: 'media/zero-g-chef/cover.mp4', width: 960, crf: 36 },
+  {
+    from: 'space-burger-portfolio.mp4',
+    to: 'media/zero-g-chef/cover.mp4',
+    width: 960,
+    crf: 36,
+    poster: { at: 1, to: 'media/zero-g-chef/shot-01.webp', width: 1280 },
+  },
   { from: 'starborn-cover.mp4', to: 'media/starborn/cover.mp4', width: 960, crf: 32 },
   { from: 'death-drive-cover.mp4', to: 'media/death-drive/cover.mp4', width: 960, crf: 32 },
   { from: 'augury-point-cover.mp4', to: 'media/augury-point/cover.mp4', width: 960, crf: 32 },
@@ -47,6 +53,10 @@ const VIDEOS = [
 const IMAGES = [
   // Capsule art du jeu, logo compris: c'est l'image qui identifie Space Burger.
   { from: 'images/space-burger-capsule.png', to: 'media/zero-g-chef/capsule.webp', width: 1280 },
+  // Capsules Steam, livrees a leur taille native: pas d'agrandissement, il ne
+  // ferait qu'ajouter du flou.
+  { from: 'images/death-drive-capsule.jpg', to: 'media/death-drive/capsule.webp', width: 1280 },
+  { from: 'images/eldritch-break-capsule.jpg', to: 'media/eldritch-break/capsule.webp', width: 1280 },
   { from: 'images/starborn-shot-01.webp', to: 'media/starborn/shot-01.webp', width: 1280 },
   { from: 'images/death-drive-shot-01.webp', to: 'media/death-drive/shot-01.webp', width: 1280 },
   { from: 'images/augury-point-shot-01.webp', to: 'media/augury-point/shot-01.webp', width: 1280 },
