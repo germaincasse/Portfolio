@@ -46,7 +46,7 @@ const VIDEOS = [
 // ecran dense. Les icones sont affichees en 96px.
 const IMAGES = [
   // Capsule art du jeu, logo compris: c'est l'image qui identifie Space Burger.
-  { from: 'images/space-burger-capsule.png', to: 'media/zero-g-chef/shot-01.webp', width: 1280 },
+  { from: 'images/space-burger-capsule.png', to: 'media/zero-g-chef/capsule.webp', width: 1280 },
   { from: 'images/starborn-shot-01.webp', to: 'media/starborn/shot-01.webp', width: 1280 },
   { from: 'images/death-drive-shot-01.webp', to: 'media/death-drive/shot-01.webp', width: 1280 },
   { from: 'images/augury-point-shot-01.webp', to: 'media/augury-point/shot-01.webp', width: 1280 },

@@ -6,7 +6,7 @@ engine: Unity
 year: 2025
 tags: ['Unity', '3D', 'Multiplayer', 'PC']
 cover: /media/zero-g-chef/cover.mp4
-poster: /media/zero-g-chef/shot-01.webp
+poster: /media/zero-g-chef/capsule.webp
 # Screenshots en plus (le poster ci-dessus est deja affiche en grand).
 # Deposer les fichiers dans public/media/zero-g-chef/ puis les lister ici :
 #   - /media/zero-g-chef/shot-02.png
