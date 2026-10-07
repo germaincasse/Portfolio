@@ -13,7 +13,8 @@ preview: /media/zero-g-chef/capsule.webp
 # Deposer les fichiers dans public/media/zero-g-chef/ puis les lister ici :
 #   - /media/zero-g-chef/shot-02.png
 gallery: []
-links: []
+links:
+  - { label: 'Steam', url: 'https://store.steampowered.com/app/4717840/Space_Burger/' }
 accent: '#6ee36e'
 order: 1
 draft: false
