@@ -1,27 +1,33 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import SteamIcon from '../../components/SteamIcon.astro';
 import { asset, pad, isSteam } from '../../utils';
+import { getProjects, nextOf } from '../../projects';
 
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
-    (a, b) => a.data.order - b.data.order,
-  );
+  const { chain, numbering } = await getProjects();
 
-  return projects.map((project, i) => ({
+  return chain.map((project) => ({
     params: { slug: project.id },
     props: {
       project,
-      index: i + 1,
-      next: projects[(i + 1) % projects.length],
+      index: numbering.get(project.id)!,
+      // Hors apercu, le lien "Next project" saute les projets secrets. Depuis
+      // une page secrete (atteinte en apercu), on reste dans la chaine complete.
+      next: nextOf(chain, project, !project.data.secret),
+      nextInPreview: nextOf(chain, project, false),
     },
   }));
 }
 
-const { project, index, next } = Astro.props;
+const { project, index, next, nextInPreview } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
+
+const shownIndex = `(${pad(index.public ?? index.preview)})`;
+const previewIndex = `(${pad(index.preview)})`;
+const nextDiffers = nextInPreview.id !== next.id;
 
 // Le poster sert deja de visuel principal: pas la peine de le repeter en galerie.
 const gallery = d.gallery.filter((src) => src !== d.poster);
@@ -32,6 +38,7 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
   description={d.tagline}
   ogImage={d.poster}
   accent={d.accent}
+  noindex={d.secret}
 >
   <article class="project">
     <!-- Ecran d'ouverture: le gameplay tient tout l'ecran, le titre est pose
@@ -57,12 +64,17 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
       </div>
 
       <div class="wrap stage__inner">
-        <a class="back mono" href={asset('/#work')}>
+        <a class="back mono" href={asset(d.category === 'software' ? '/#side-projects' : '/#work')}>
           <span aria-hidden="true">←</span> All projects
         </a>
 
         <div class="stage__bottom">
-          <p class="mono project__index">({pad(index)})</p>
+          <p
+            class="mono project__index"
+            data-preview-text={previewIndex !== shownIndex ? previewIndex : undefined}
+          >
+            {shownIndex}
+          </p>
           <h1 class="project__title display">{d.title}</h1>
           <p class="project__tagline">{d.tagline}</p>
         </div>
@@ -77,8 +89,16 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
             <dt>Type</dt>
             <dd>{d.role}</dd>
           </div>
+          {
+            d.studio && (
+              <div class="meta__row">
+                <dt>Studio</dt>
+                <dd>{d.studio}</dd>
+              </div>
+            )
+          }
           <div class="meta__row">
-            <dt>Engine</dt>
+            <dt>{d.category === 'software' ? 'Stack' : 'Engine'}</dt>
             <dd>{d.engine}</dd>
           </div>
           <div class="meta__row">
@@ -152,10 +172,21 @@ const gallery = d.gallery.filter((src) => src !== d.poster);
     }
 
     <!-- Projet suivant -->
-    <a class="next" href={asset(`/work/${next.id}`)} style={`--accent: ${next.data.accent};`}>
+    <a
+      class="next"
+      href={asset(`/work/${next.id}`)}
+      style={`--accent: ${next.data.accent};`}
+      data-preview-href={nextDiffers ? asset(`/work/${nextInPreview.id}`) : undefined}
+      data-preview-style={nextDiffers ? `--accent: ${nextInPreview.data.accent};` : undefined}
+    >
       <div class="wrap next__inner">
         <p class="mono next__label">Next project</p>
-        <p class="next__title display">{next.data.title}</p>
+        <p
+          class="next__title display"
+          data-preview-text={nextDiffers ? nextInPreview.data.title : undefined}
+        >
+          {next.data.title}
+        </p>
         <p class="mono next__arrow" aria-hidden="true">→</p>
       </div>
     </a>

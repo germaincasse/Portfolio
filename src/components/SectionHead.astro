@@ -1,15 +1,19 @@
 ---
 interface Props {
   index: string;
+  /** Numero en mode apercu, quand une section secrete le decale (PreviewMode). */
+  previewIndex?: string;
   title: string;
-  note?: string;
   id?: string;
 }
-const { index, title, note, id } = Astro.props;
+const { index, previewIndex, title, id } = Astro.props;
 ---
 
 <div class="section-head" id={id}>
-  <span class="section-head__index mono">({index})</span>
+  <span
+    class="section-head__index mono"
+    data-preview-text={previewIndex && previewIndex !== index ? `(${previewIndex})` : undefined}
+    >({index})</span
+  >
   <h2 class="section-head__title display">{title}</h2>
-  {note && <p class="section-head__note mono">{note}</p>}
 </div>

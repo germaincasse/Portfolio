@@ -1,10 +1,14 @@
 ---
 import SteamIcon from './SteamIcon.astro';
 import { asset, pad, isSteam } from '../utils';
+import type { Numbering } from '../projects';
 
 interface Props {
   slug: string;
-  index: number;
+  /** Numero dans la rubrique, hors apercu et en apercu. */
+  index: Numbering;
+  /** Projet pas encore publie: carte visible seulement en mode apercu. */
+  secret?: boolean;
   title: string;
   tagline: string;
   role: string;
@@ -22,6 +26,7 @@ interface Props {
 const {
   slug,
   index,
+  secret = false,
   title,
   tagline,
   role,
@@ -35,6 +40,10 @@ const {
   accent,
   links = [],
 } = Astro.props;
+
+// Un projet secret n'a pas de numero public: il n'est montre qu'en apercu.
+const shown = pad(index.public ?? index.preview);
+const inPreview = pad(index.preview);
 ---
 
 <a
@@ -42,6 +51,7 @@ const {
   href={asset(`/work/${slug}`)}
   style={`--accent: ${accent};`}
   aria-label={`${title}: ${tagline}`}
+  data-secret={secret || undefined}
 >
   <div class="card__media">
     {/* L'illustration est ce qu'on voit par defaut: elle ne bouge pas tant que
@@ -68,7 +78,10 @@ const {
         />
       )
     }
-    <span class="card__index mono">{pad(index)}</span>
+    <span
+      class="card__index mono"
+      data-preview-text={inPreview !== shown ? inPreview : undefined}>{shown}</span
+    >
     <span class="card__view mono">View<span aria-hidden="true"> →</span></span>
   </div>
 

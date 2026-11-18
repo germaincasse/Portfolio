@@ -177,29 +177,6 @@ button {
   font-stretch: 108%;
   color: var(--text);
 }
-.section-head__note {
-  margin-left: auto;
-  align-self: flex-end;
-  padding-bottom: 0.35em;
-  color: var(--text-faint);
-  text-align: right;
-  max-width: 36ch;
-  text-transform: none;
-  letter-spacing: 0.02em;
-}
-
-@media (max-width: 44rem) {
-  .section-head {
-    flex-wrap: wrap;
-  }
-  .section-head__note {
-    flex-basis: 100%;
-    margin-left: 0;
-    text-align: left;
-    max-width: none;
-  }
-}
-
 /* Etiquettes */
 .tags {
   display: flex;
@@ -294,6 +271,12 @@ html.js .reveal.is-in {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Projets pas encore publies: visibles seulement en mode apercu (M+P+O, voir
+   PreviewMode.astro). */
+html:not(.is-preview) [data-secret] {
+  display: none !important;
 }
 
 /* Reserve aux lecteurs d'ecran: porte l'information que l'icone seule donne. */

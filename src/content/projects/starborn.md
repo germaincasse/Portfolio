@@ -2,6 +2,7 @@
 title: Starborn
 tagline: A card-based fighting game with dozens of cards, enemies and build-defining synergies.
 role: Freelance project
+studio: Deep Ocean Studio
 engine: Godot
 year: 2025
 status: Unreleased
@@ -14,7 +15,7 @@ poster: /media/starborn/shot-01.webp
 gallery: []
 links: []
 accent: '#e0a03c'
-order: 2
+order: 3
 draft: false
 ---
 

@@ -1,0 +1,156 @@
+---
+/**
+ * Mode apercu: montre les projets `secret: true` avant leur mise en ligne.
+ *
+ * Bascule avec M+P+O, les trois touches tenues ensemble ou tapees a la suite.
+ * L'etat est garde dans le navigateur (localStorage), il survit donc a la
+ * navigation entre la home et les pages projet. La classe `is-preview` est
+ * posee sur <html> des le <head> (voir Base.astro) pour eviter un flash.
+ *
+ * Ce qui change d'un etat a l'autre est decrit dans le HTML:
+ *   data-secret          element masque hors apercu (regle dans global.css)
+ *   data-preview-text    texte a afficher en apercu (numeros de section, de carte)
+ *   data-preview-href    lien a suivre en apercu ("Next project")
+ *   data-preview-style   style a poser en apercu (accent du projet suivant)
+ *
+ * Pour publier ces projets: retirer `secret: true` de leur fiche. Quand plus
+ * aucun projet n'est secret, ce composant peut partir de Base.astro.
+ */
+import { getProjects } from '../projects';
+
+const { chain } = await getProjects();
+const hidden = chain.filter((p) => p.data.secret).length;
+---
+
+{
+  hidden > 0 && (
+    <div class="preview-toast mono" role="status" aria-live="polite" data-hidden-count={hidden} />
+  )
+}
+
+<script>
+  // Meme cle et meme classe que le script en ligne du <head> de Base.astro.
+  const STORAGE_KEY = 'portfolio:preview';
+  const CLASS = 'is-preview';
+  const COMBO = ['m', 'p', 'o'];
+
+  const root = document.documentElement;
+  const toastEl = document.querySelector<HTMLElement>('.preview-toast');
+
+  if (toastEl) {
+    const count = Number(toastEl.dataset.hiddenCount);
+
+    const save = (on: boolean) => {
+      try {
+        if (on) localStorage.setItem(STORAGE_KEY, '1');
+        else localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* stockage bloque: l'apercu vaut pour cette page seulement */
+      }
+    };
+
+    // Chaque element garde sa valeur publique la premiere fois qu'on le
+    // bascule, pour pouvoir revenir en arriere sans recharger.
+    const swap = (attr: 'text' | 'href' | 'style', on: boolean) => {
+      const name = attr[0].toUpperCase() + attr.slice(1); // Text, Href, Style
+      for (const el of document.querySelectorAll<HTMLElement>(`[data-preview-${attr}]`)) {
+        el.dataset[`public${name}`] ??=
+          attr === 'text' ? el.textContent ?? '' : el.getAttribute(attr) ?? '';
+        const value = el.dataset[on ? `preview${name}` : `public${name}`] ?? '';
+        if (attr === 'text') el.textContent = value;
+        else el.setAttribute(attr, value);
+      }
+    };
+
+    const apply = (on: boolean) => {
+      root.classList.toggle(CLASS, on);
+      swap('text', on);
+      swap('href', on);
+      swap('style', on);
+    };
+
+    let toastTimer: number | undefined;
+    const toast = (message: string) => {
+      toastEl.textContent = message;
+      toastEl.classList.add('is-shown');
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toastEl.classList.remove('is-shown'), 2600);
+    };
+
+    const toggle = () => {
+      const on = !root.classList.contains(CLASS);
+      apply(on);
+      save(on);
+      toast(
+        on
+          ? `Preview: ${count} unreleased project${count > 1 ? 's' : ''} shown`
+          : 'Preview off',
+      );
+    };
+
+    // La classe a pu etre posee par le <head>: on aligne les textes et liens.
+    if (root.classList.contains(CLASS)) apply(true);
+
+    const held = new Set<string>();
+    let typed = '';
+    let typedAt = 0;
+
+    const isTyping = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      return !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName));
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || isTyping(e.target)) return;
+      // e.key plutot que e.code: la lettre tapee, quelle que soit la
+      // disposition du clavier (le M n'est pas au meme endroit en AZERTY).
+      const k = e.key.toLowerCase();
+      if (!COMBO.includes(k)) {
+        typed = '';
+        return;
+      }
+      if (e.repeat) return;
+
+      held.add(k);
+      const now = performance.now();
+      typed = (now - typedAt < 1200 ? typed : '') + k;
+      typedAt = now;
+
+      if (COMBO.every((c) => held.has(c)) || typed.endsWith(COMBO.join(''))) {
+        held.clear();
+        typed = '';
+        toggle();
+      }
+    });
+    window.addEventListener('keyup', (e) => held.delete(e.key.toLowerCase()));
+    window.addEventListener('blur', () => held.clear());
+  }
+</script>
+
+<style>
+  .preview-toast {
+    position: fixed;
+    left: 50%;
+    bottom: clamp(1rem, 4vh, 2rem);
+    z-index: 200;
+    max-width: calc(100vw - 2rem);
+    padding: 0.75rem 1.1rem;
+    background: var(--bg-raise);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    border-radius: 2px;
+    color: var(--text);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 0.6rem);
+    transition:
+      opacity 0.35s var(--ease),
+      transform 0.35s var(--ease);
+  }
+
+  .preview-toast.is-shown {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+</style>

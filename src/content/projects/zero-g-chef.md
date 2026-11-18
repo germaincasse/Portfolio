@@ -16,7 +16,7 @@ gallery: []
 links:
   - { label: 'Steam', url: 'https://store.steampowered.com/app/4717840/Space_Burger/' }
 accent: '#6ee36e'
-order: 1
+order: 0
 draft: false
 ---
 

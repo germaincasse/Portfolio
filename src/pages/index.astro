@@ -1,16 +1,42 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import SlotTitle from '../components/SlotTitle.astro';
 import { site } from '../site';
-import { asset } from '../utils';
+import { asset, pad } from '../utils';
+import { getProjects, type Project } from '../projects';
 
 // Tous les projets sont sur la home: c'est la seule page qui les liste.
-const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const { games, software, numbering } = await getProjects();
+
+// La rubrique Side projects decale la numerotation des sections qui la
+// suivent. Tant que tous ses projets sont secrets, elle n'existe qu'en apercu:
+// les deux numerotations sont calculees ici (PreviewMode bascule de l'une a
+// l'autre).
+const softwareIsSecret = software.length > 0 && software.every((p) => p.data.secret);
+const after = (n: number) => ({
+  index: pad(n + (software.length > 0 && !softwareIsSecret ? 1 : 0)),
+  previewIndex: pad(n + (software.length > 0 ? 1 : 0)),
+});
+
+const cardProps = (p: Project) => ({
+  slug: p.id,
+  index: numbering.get(p.id)!,
+  secret: p.data.secret,
+  title: p.data.title,
+  tagline: p.data.tagline,
+  role: p.data.role,
+  engine: p.data.engine,
+  year: p.data.year,
+  status: p.data.status,
+  tags: p.data.tags,
+  cover: p.data.cover,
+  poster: p.data.poster,
+  preview: p.data.preview,
+  accent: p.data.accent,
+  links: p.data.links,
+});
 ---
 
 <Base>
@@ -31,7 +57,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
     <div class="wrap hero__inner">
       <p class="mono hero__eyebrow">
         <span class="hero__eyebrow-dot" aria-hidden="true"></span>
-        {site.role} &middot; Unity &amp; Godot &middot; {site.availability}
+        {site.role} &middot; Unity &amp; Godot
       </p>
 
       <h1 class="hero__title display" aria-label={site.name}>
@@ -48,44 +74,29 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 
   <!-- ================= WORK ================= -->
   <section class="section wrap" id="work">
-    <SectionHead
-      index="01"
-      title="Projects"
-      note="Client and personal projects, PC and mobile."
-    />
+    <SectionHead index="01" title="Projects" />
 
     <div class="cards">
-      {
-        projects.map((p, i) => (
-          <ProjectCard
-            slug={p.id}
-            index={i + 1}
-            title={p.data.title}
-            tagline={p.data.tagline}
-            role={p.data.role}
-            engine={p.data.engine}
-            year={p.data.year}
-            status={p.data.status}
-            tags={p.data.tags}
-            cover={p.data.cover}
-            poster={p.data.poster}
-            preview={p.data.preview}
-            accent={p.data.accent}
-            links={p.data.links}
-          />
-        ))
-      }
+      {games.map((p) => <ProjectCard {...cardProps(p)} />)}
     </div>
-
   </section>
+
+  <!-- ================= SIDE PROJECTS ================= -->
+  {
+    software.length > 0 && (
+      <section class="section wrap" id="side-projects" data-secret={softwareIsSecret || undefined}>
+        <SectionHead index="02" title="Side projects" />
+
+        <div class="cards">
+          {software.map((p) => <ProjectCard {...cardProps(p)} />)}
+        </div>
+      </section>
+    )
+  }
 
   <!-- ================= CAPABILITIES ================= -->
   <section class="section wrap">
-    <SectionHead
-      index="02"
-      title="What I do"
-      note="What I take on, and what I use."
-    />
+    <SectionHead {...after(2)} title="What I do" />
 
     <ul class="caps">
       {
@@ -115,7 +126,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 
   <!-- ================= ABOUT ================= -->
   <section class="section wrap" id="about">
-    <SectionHead index="03" title="About" />
+    <SectionHead {...after(3)} title="About" />
 
     <div class="about reveal">
       <p class="about__lead">{site.about.lead}</p>

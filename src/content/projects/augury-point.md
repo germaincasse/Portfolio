@@ -15,7 +15,7 @@ gallery: []
 links:
   - { label: 'Steam', url: 'https://store.steampowered.com/app/2657430/Augury_Point/' }
 accent: '#e11d2e'
-order: 4
+order: 5
 draft: false
 ---
 

@@ -4,6 +4,7 @@ import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PreviewMode from '../components/PreviewMode.astro';
 import { site } from '../site';
 import { asset } from '../utils';
 
@@ -14,6 +15,8 @@ interface Props {
   ogImage?: string;
   /** Accent surcharge par les pages projet. */
   accent?: string;
+  /** true = page a garder hors des moteurs de recherche (projet secret). */
+  noindex?: boolean;
 }
 
 const {
@@ -21,6 +24,7 @@ const {
   description = site.description,
   ogImage = '/media/home/poster.webp',
   accent,
+  noindex = false,
 } = Astro.props;
 
 const pageTitle = title
@@ -39,6 +43,7 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href={asset('/favicon.svg')} type="image/svg+xml" />
 
     <meta property="og:type" content="website" />
@@ -51,6 +56,13 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
     <meta name="theme-color" content="#08080a" />
     <script is:inline>
       document.documentElement.classList.add('js');
+      // Mode apercu (M+P+O, voir PreviewMode.astro): pose avant le premier
+      // rendu, sinon les projets secrets apparaitraient apres un flash.
+      try {
+        if (localStorage.getItem('portfolio:preview') === '1') {
+          document.documentElement.classList.add('is-preview');
+        }
+      } catch (e) {}
     </script>
   </head>
 
@@ -63,6 +75,7 @@ const ogUrl = new URL(asset(ogImage), Astro.site ?? Astro.url);
       <slot />
     </main>
     <Footer />
+    <PreviewMode />
 
     <script>
       // --- Reveal au scroll -------------------------------------------------

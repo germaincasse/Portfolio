@@ -10,6 +10,8 @@ const projects = defineCollection({
     tagline: z.string(),
     /** Ex: "Freelance project", "Personal project", "Client work". */
     role: z.string(),
+    /** Studio ou client, affiche dans la colonne d'infos de la page projet. */
+    studio: z.string().optional(),
     /** Unity, Godot, Web... affiche a cote du role. */
     engine: z.string(),
     /**
@@ -42,10 +44,21 @@ const projects = defineCollection({
       .default([]),
     /** Couleur d'accent propre au projet (hex). Sert au hover et a la page projet. */
     accent: z.string().default('#ff4d29'),
-    /** Plus petit = plus haut dans la liste. */
+    /**
+     * Rubrique de la home: 'games' pour la grille Projects, 'software' pour
+     * Side projects, juste en dessous (moteur, outils, web).
+     */
+    category: z.enum(['games', 'software']).default('games'),
+    /** Plus petit = plus haut dans sa rubrique. */
     order: z.number().default(99),
     /** true = le projet n'apparait nulle part sur le site. */
     draft: z.boolean().default(false),
+    /**
+     * true = cache par defaut, montre seulement en mode apercu (raccourci
+     * M+P+O, voir PreviewMode.astro). La page du projet existe mais n'est
+     * liee nulle part et n'est pas indexee. Retirer la ligne pour publier.
+     */
+    secret: z.boolean().default(false),
   }),
 });
 
